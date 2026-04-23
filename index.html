@@ -3,35 +3,145 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reclaiming the Narrative — AI x EI Conference 2026</title>
+  <title>Reclaiming the Narrative — AI × EI Conference 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
   <style>
+    /* ═══════════════════════════════════════════
+       DESIGN TOKENS — Threshold Design System
+    ═══════════════════════════════════════════ */
     :root {
-      --bg: #0a0a0f;
-      --surface: #12121a;
-      --surface2: #1a1a28;
-      --border: #2a2a3d;
-      --accent: #7c6aff;
-      --accent2: #3ecfcf;
-      --accent3: #ff6a6a;
-      --text: #e8e8f0;
-      --muted: #7a7a96;
-      --green: #4ade80;
-      --yellow: #fbbf24;
+      /* Colors */
+      --background:                #08090d;
+      --surface:                   #0f1117;
+      --surface-dim:               #08090d;
+      --surface-bright:            #1c1e2a;
+      --surface-container-lowest:  #05060a;
+      --surface-container-low:     #111320;
+      --surface-container:         #161825;
+      --surface-container-high:    #1c1e2a;
+      --surface-container-highest: #252836;
+      --on-surface:                #e6e8f8;
+      --on-surface-variant:        #9296b0;
+      --outline:                   #3a3d52;
+      --outline-variant:           #252836;
+      --primary:                   #f4c430;
+      --on-primary:                #190e00;
+      --primary-container:         #3d2e00;
+      --on-primary-container:      #fde68a;
+      --primary-fixed:             #ffe082;
+      --secondary:                 #38d9d9;
+      --on-secondary:              #002828;
+      --secondary-container:       #004444;
+      --on-secondary-container:    #9fffff;
+      --tertiary:                  #c4b5fd;
+      --tertiary-container:        #4c1d95;
+      --error:                     #f87171;
+      --success:                   #4ade80;
+
+      /* Typography */
+      --font-display: 'Space Grotesk', system-ui, sans-serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+      --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+
+      /* Spacing */
+      --slide-pad-x: 72px;
+      --slide-pad-y: 52px;
+
+      /* Rounded */
+      --r-sm:   4px;
+      --r-md:   10px;
+      --r-lg:   14px;
+      --r-xl:   20px;
+      --r-2xl:  28px;
+      --r-full: 9999px;
+
+      /* Elevation glow */
+      --glow-primary: 0 0 60px rgba(244, 196, 48, 0.08), 0 8px 40px rgba(0,0,0,0.5);
+      --glow-secondary: 0 0 60px rgba(56, 217, 217, 0.08), 0 8px 40px rgba(0,0,0,0.5);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ═══════════════════════════════════════════
+       BASE RESET
+    ═══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      overflow: hidden;
-      height: 100vh;
+    html, body {
       width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── SLIDES ── */
-    .deck { width: 100%; height: 100vh; position: relative; }
+    /* ═══════════════════════════════════════════
+       PROGRESS BAR
+    ═══════════════════════════════════════════ */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width 0.35s cubic-bezier(.4,0,.2,1);
+      z-index: 200;
+      box-shadow: 0 0 12px rgba(244,196,48,0.6);
+    }
+
+    /* ═══════════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════════ */
+    .nav-btn {
+      position: fixed;
+      bottom: 24px;
+      background: var(--surface-container);
+      border: 1px solid var(--outline);
+      color: var(--on-surface-variant);
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--r-md);
+      cursor: pointer;
+      z-index: 200;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-btn:hover {
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+      border-color: var(--outline-variant);
+    }
+    #btn-prev { left: 24px; }
+    #btn-next { left: 72px; }
+
+    #slide-counter {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--on-surface-variant);
+      z-index: 200;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ═══════════════════════════════════════════
+       SLIDE SYSTEM
+    ═══════════════════════════════════════════ */
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
 
     .slide {
       position: absolute;
@@ -39,842 +149,947 @@
       display: none;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
-      padding: 48px 64px;
+      align-items: flex-start;
+      padding: var(--slide-pad-y) var(--slide-pad-x);
       opacity: 0;
-      transition: opacity 0.4s ease;
+      transition: opacity 0.38s ease;
     }
     .slide.active {
       display: flex;
       opacity: 1;
     }
+    .slide.center { align-items: center; }
 
-    /* ── PROGRESS ── */
-    #progress-bar {
-      position: fixed;
-      top: 0; left: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      transition: width 0.3s ease;
-      z-index: 100;
-    }
-
-    #slide-counter {
-      position: fixed;
-      bottom: 20px;
-      right: 28px;
-      font-size: 12px;
-      color: var(--muted);
-      z-index: 100;
-      font-variant-numeric: tabular-nums;
-    }
-
-    /* ── NAV ── */
-    .nav-btn {
-      position: fixed;
-      bottom: 20px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-size: 18px;
-      padding: 8px 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      z-index: 100;
-      transition: background 0.2s;
-    }
-    .nav-btn:hover { background: var(--border); }
-    #btn-prev { left: 28px; }
-    #btn-next { left: 90px; }
-
-    /* ── TYPOGRAPHY ── */
+    /* ═══════════════════════════════════════════
+       TYPOGRAPHY
+    ═══════════════════════════════════════════ */
     .eyebrow {
+      font-family: var(--font-display);
       font-size: 11px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--accent2);
-      margin-bottom: 16px;
-    }
-    h1 {
-      font-size: clamp(2.4rem, 5vw, 4.2rem);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -1px;
-    }
-    h2 {
-      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: -0.5px;
-    }
-    h3 {
-      font-size: clamp(1.1rem, 2vw, 1.5rem);
       font-weight: 600;
-      color: var(--accent2);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--secondary);
+      margin-bottom: 14px;
+    }
+
+    .display-xl {
+      font-family: var(--font-display);
+      font-size: clamp(52px, 6.5vw, 80px);
+      font-weight: 800;
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+      color: var(--on-surface);
+    }
+
+    .headline-lg {
+      font-family: var(--font-display);
+      font-size: clamp(30px, 3.8vw, 42px);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+      color: var(--on-surface);
+    }
+
+    .headline-md {
+      font-family: var(--font-display);
+      font-size: clamp(17px, 1.8vw, 21px);
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      color: var(--secondary);
       margin-bottom: 8px;
     }
-    p, li {
-      font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+
+    .body-lg {
+      font-family: var(--font-body);
+      font-size: clamp(15px, 1.4vw, 17px);
       line-height: 1.7;
-      color: var(--text);
+      color: var(--on-surface);
     }
-    .muted { color: var(--muted); }
-    .accent { color: var(--accent); }
-    .accent2 { color: var(--accent2); }
-    .accent3 { color: var(--accent3); }
-    .green { color: var(--green); }
-    .yellow { color: var(--yellow); }
 
-    strong { color: #fff; font-weight: 700; }
+    .body-md {
+      font-family: var(--font-body);
+      font-size: clamp(13px, 1.2vw, 15px);
+      line-height: 1.65;
+      color: var(--on-surface);
+    }
 
-    /* ── LAYOUT HELPERS ── */
+    .body-muted {
+      font-family: var(--font-body);
+      font-size: clamp(13px, 1.2vw, 15px);
+      line-height: 1.65;
+      color: var(--on-surface-variant);
+    }
+
+    .text-primary  { color: var(--primary) !important; }
+    .text-secondary { color: var(--secondary) !important; }
+    .text-tertiary { color: var(--tertiary) !important; }
+    .text-error    { color: var(--error) !important; }
+    .text-success  { color: var(--success) !important; }
+    strong         { color: #fff; font-weight: 700; }
+
+    .glow-text {
+      text-shadow: 0 0 50px rgba(244, 196, 48, 0.35);
+    }
+
+    /* ═══════════════════════════════════════════
+       LAYOUT
+    ═══════════════════════════════════════════ */
+    .content-col {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      max-width: 1060px;
+    }
+
     .cols-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 32px;
+      gap: 24px;
       width: 100%;
-      max-width: 1100px;
+      max-width: 1060px;
     }
+
     .cols-3 {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 24px;
+      gap: 20px;
       width: 100%;
-      max-width: 1100px;
+      max-width: 1060px;
     }
+
     .stack {
       display: flex;
       flex-direction: column;
       gap: 16px;
       width: 100%;
-      max-width: 900px;
-    }
-    .center { text-align: center; }
-    .content-col {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      align-items: flex-start;
-      width: 100%;
-      max-width: 960px;
     }
 
-    /* ── CARDS ── */
+    .divider {
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ═══════════════════════════════════════════
+       CARDS
+    ═══════════════════════════════════════════ */
     .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      background: var(--surface-container);
+      border: 1px solid var(--outline);
+      border-radius: var(--r-xl);
       padding: 24px;
     }
-    .card-accent {
-      border-color: var(--accent);
-      background: linear-gradient(135deg, #1a1a30, #12121a);
-    }
-    .card-green {
-      border-color: var(--green);
-      background: linear-gradient(135deg, #0d1f14, #12121a);
-    }
-    .card-yellow {
-      border-color: var(--yellow);
-      background: linear-gradient(135deg, #1f1a0d, #12121a);
-    }
-    .card-red {
-      border-color: var(--accent3);
-      background: linear-gradient(135deg, #1f0d0d, #12121a);
+
+    .card-glass {
+      background: rgba(244, 196, 48, 0.03);
+      border: 1px solid rgba(244, 196, 48, 0.14);
+      border-radius: var(--r-xl);
+      padding: 24px;
+      backdrop-filter: blur(12px);
     }
 
-    /* ── CHIP / BADGE ── */
+    .card-glass-secondary {
+      background: rgba(56, 217, 217, 0.04);
+      border: 1px solid rgba(56, 217, 217, 0.16);
+      border-radius: var(--r-xl);
+      padding: 24px;
+      backdrop-filter: blur(12px);
+    }
+
+    .card-danger {
+      background: rgba(248, 113, 113, 0.05);
+      border: 1px solid rgba(248, 113, 113, 0.2);
+      border-radius: var(--r-xl);
+      padding: 24px;
+    }
+
+    .card-success {
+      background: rgba(74, 222, 128, 0.04);
+      border: 1px solid rgba(74, 222, 128, 0.2);
+      border-radius: var(--r-xl);
+      padding: 24px;
+    }
+
+    /* ═══════════════════════════════════════════
+       CHIPS / BADGES
+    ═══════════════════════════════════════════ */
     .chip {
-      display: inline-block;
-      padding: 3px 12px;
-      border-radius: 99px;
-      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 11px;
+      border-radius: var(--r-full);
+      font-family: var(--font-display);
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.06em;
     }
-    .chip-purple { background: #2a1f5e; color: var(--accent); border: 1px solid var(--accent); }
-    .chip-teal   { background: #0d2f2f; color: var(--accent2); border: 1px solid var(--accent2); }
-    .chip-red    { background: #2f0d0d; color: var(--accent3); border: 1px solid var(--accent3); }
-    .chip-green  { background: #0d1f14; color: var(--green); border: 1px solid var(--green); }
+    .chip-primary   { background: rgba(244,196,48,0.12); color: var(--primary); border: 1px solid rgba(244,196,48,0.25); }
+    .chip-secondary { background: rgba(56,217,217,0.1);  color: var(--secondary); border: 1px solid rgba(56,217,217,0.22); }
+    .chip-danger    { background: rgba(248,113,113,0.1); color: var(--error); border: 1px solid rgba(248,113,113,0.22); }
+    .chip-success   { background: rgba(74,222,128,0.1);  color: var(--success); border: 1px solid rgba(74,222,128,0.22); }
+    .chip-muted     { background: rgba(146,150,176,0.1); color: var(--on-surface-variant); border: 1px solid var(--outline); }
 
-    /* ── BIG STAT ── */
-    .stat-block {
-      text-align: center;
-      padding: 24px;
-    }
-    .stat-num {
-      font-size: clamp(3rem, 7vw, 5.5rem);
-      font-weight: 900;
-      line-height: 1;
-      letter-spacing: -2px;
-    }
-    .stat-label {
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-top: 6px;
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
-    /* ── CODE BLOCK ── */
-    pre, code {
-      font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-    }
-    .code-block {
-      background: #0d0d14;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px 20px;
-      font-size: 0.82rem;
-      line-height: 1.6;
-      overflow-x: auto;
-      width: 100%;
-    }
-    .code-block .kw { color: #c792ea; }
-    .code-block .str { color: #c3e88d; }
-    .code-block .cm { color: #546e7a; }
-    .code-block .fn { color: #82aaff; }
-    .code-block .num { color: #f78c6c; }
-
-    /* ── STEP LIST ── */
+    /* ═══════════════════════════════════════════
+       STEP LIST
+    ═══════════════════════════════════════════ */
     .step-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      width: 100%;
+      gap: 11px;
     }
     .step-list li {
       display: flex;
       align-items: flex-start;
-      gap: 14px;
+      gap: 12px;
+      font-family: var(--font-body);
+      font-size: clamp(12px, 1.15vw, 14px);
+      line-height: 1.55;
+      color: var(--on-surface);
     }
     .step-num {
-      min-width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--accent);
-      color: #fff;
-      font-size: 13px;
+      min-width: 24px;
+      height: 24px;
+      border-radius: var(--r-full);
+      background: var(--primary);
+      color: var(--on-primary);
+      font-family: var(--font-display);
+      font-size: 12px;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      margin-top: 2px;
+      margin-top: 1px;
+    }
+    .step-icon {
+      font-size: 16px;
+      margin-top: 0;
+      flex-shrink: 0;
     }
 
-    /* ── QUOTE ── */
-    .quote-block {
-      border-left: 3px solid var(--accent);
-      padding-left: 20px;
-      font-size: clamp(1rem, 2vw, 1.3rem);
-      font-style: italic;
-      color: var(--text);
-      max-width: 800px;
-    }
-
-    /* ── DIVIDER ── */
-    .divider {
-      width: 60px;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      border-radius: 2px;
-      margin: 12px 0;
-    }
-
-    /* ── PILL TAGS ── */
-    .tag-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    /* ── DEMO PANEL (live) ── */
-    #demo-panel {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      width: 100%;
-      max-width: 860px;
+    /* ═══════════════════════════════════════════
+       STAT BLOCKS
+    ═══════════════════════════════════════════ */
+    .stat-block {
       display: flex;
       flex-direction: column;
-      gap: 0;
-      overflow: hidden;
-      box-shadow: 0 24px 80px rgba(124, 106, 255, 0.12);
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+      padding: 28px 20px;
     }
-    #demo-header {
-      background: var(--surface2);
-      border-bottom: 1px solid var(--border);
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: clamp(42px, 5vw, 60px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--primary);
+    }
+    .stat-unit {
+      font-size: 0.42em;
+      vertical-align: super;
+      font-weight: 700;
+    }
+    .stat-label {
+      font-family: var(--font-body);
+      font-size: 12px;
+      color: var(--on-surface-variant);
+      line-height: 1.5;
+      max-width: 200px;
+    }
+
+    /* ═══════════════════════════════════════════
+       CODE BLOCKS
+    ═══════════════════════════════════════════ */
+    .code-block {
+      background: var(--surface-container-lowest);
+      border: 1px solid var(--outline);
+      border-radius: var(--r-md);
+      padding: 16px 18px;
+      font-family: var(--font-mono);
+      font-size: clamp(11px, 1vw, 13px);
+      line-height: 1.65;
+      overflow-x: auto;
+      width: 100%;
+    }
+    .kw  { color: #c792ea; }
+    .str { color: #c3e88d; }
+    .cm  { color: #454861; }
+    .fn  { color: #82aaff; }
+    .num { color: #f78c6c; }
+
+    /* ═══════════════════════════════════════════
+       QUOTE
+    ═══════════════════════════════════════════ */
+    .quote-block {
+      border-left: 2px solid var(--primary);
       padding: 12px 20px;
+      font-family: var(--font-body);
+      font-size: clamp(14px, 1.3vw, 16px);
+      font-style: italic;
+      color: var(--on-surface);
+      line-height: 1.6;
+      background: rgba(244, 196, 48, 0.03);
+      border-radius: 0 var(--r-md) var(--r-md) 0;
+    }
+
+    /* ═══════════════════════════════════════════
+       SLIDE BACKGROUNDS
+    ═══════════════════════════════════════════ */
+    #slide-1 {
+      background:
+        radial-gradient(ellipse 55% 65% at 68% 46%, rgba(76,29,149,0.35) 0%, transparent 65%),
+        radial-gradient(ellipse 35% 40% at 20% 75%, rgba(56,217,217,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse 25% 30% at 85% 20%, rgba(244,196,48,0.06) 0%, transparent 50%),
+        var(--background);
+    }
+
+    #slide-3 {
+      background:
+        radial-gradient(ellipse 60% 55% at 50% 50%, rgba(76,29,149,0.2) 0%, transparent 70%),
+        var(--background);
+    }
+
+    #slide-5 {
+      background:
+        radial-gradient(ellipse 40% 50% at 50% 50%, rgba(56,217,217,0.06) 0%, transparent 65%),
+        var(--background);
+    }
+
+    #slide-final {
+      background:
+        radial-gradient(ellipse 65% 70% at 50% 48%, rgba(76,29,149,0.3) 0%, transparent 65%),
+        radial-gradient(ellipse 30% 35% at 15% 80%, rgba(244,196,48,0.06) 0%, transparent 50%),
+        var(--background);
+    }
+
+    /* ═══════════════════════════════════════════
+       SLIDE 8 DEMO
+    ═══════════════════════════════════════════ */
+    #demo-panel {
+      width: 100%;
+      max-width: 880px;
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      box-shadow: var(--glow-primary);
+    }
+
+    #demo-titlebar {
+      background: var(--surface-container);
+      border-bottom: 1px solid var(--outline);
+      padding: 11px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .titlebar-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    #demo-model-badge {
+      margin-left: auto;
+      font-family: var(--font-display);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--secondary);
+      background: rgba(56,217,217,0.08);
+      border: 1px solid rgba(56,217,217,0.2);
+      padding: 2px 10px;
+      border-radius: var(--r-full);
+    }
+
+    #demo-status-text {
+      font-family: var(--font-display);
+      font-size: 11px;
+      color: var(--on-surface-variant);
+    }
+
+    #demo-body {
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .demo-field-label {
+      font-family: var(--font-display);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--on-surface-variant);
+      margin-bottom: 5px;
+    }
+
+    #demo-system-prompt {
+      width: 100%;
+      background: var(--surface-container-lowest);
+      border: 1px solid var(--outline);
+      border-radius: var(--r-md);
+      padding: 10px 14px;
+      color: var(--on-surface);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.6;
+      resize: vertical;
+      min-height: 64px;
+      max-height: 100px;
+      transition: border-color 0.2s;
+    }
+    #demo-system-prompt:focus {
+      outline: none;
+      border-color: rgba(244,196,48,0.4);
+    }
+
+    .preset-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .preset-label {
+      font-family: var(--font-display);
+      font-size: 10px;
+      color: var(--on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .preset-btn {
+      background: var(--surface-container);
+      border: 1px solid var(--outline);
+      border-radius: var(--r-md);
+      padding: 4px 12px;
+      color: var(--on-surface);
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .preset-btn:hover {
+      background: var(--surface-container-high);
+      border-color: rgba(244,196,48,0.3);
+      color: var(--primary);
+    }
+
+    .kb-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .kb-btn, .demo-send-btn, .demo-load-btn {
+      font-family: var(--font-display);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, opacity 0.15s;
+      border-radius: var(--r-md);
+    }
+
+    .kb-btn {
+      background: var(--surface-container);
+      border: 1px solid var(--outline);
+      color: var(--on-surface);
+      font-size: 11px;
+      padding: 5px 12px;
+    }
+    .kb-btn:hover { background: var(--surface-container-high); }
+
+    #kb-status {
+      font-family: var(--font-body);
+      font-size: 11px;
+      color: var(--on-surface-variant);
+    }
+
+    #rag-active-badge {
+      font-family: var(--font-display);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      background: rgba(74,222,128,0.1);
+      color: var(--success);
+      border: 1px solid rgba(74,222,128,0.25);
+      padding: 2px 10px;
+      border-radius: var(--r-full);
+      display: none;
+    }
+
+    #demo-output {
+      background: var(--surface-container-lowest);
+      border: 1px solid var(--outline);
+      border-radius: var(--r-md);
+      padding: 12px 14px;
+      min-height: 72px;
+      max-height: 150px;
+      overflow-y: auto;
+      font-family: var(--font-body);
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--on-surface);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .demo-input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    #demo-input {
+      flex: 1;
+      background: var(--surface-container-lowest);
+      border: 1px solid var(--outline);
+      border-radius: var(--r-md);
+      padding: 9px 14px;
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: 13px;
+      transition: border-color 0.2s;
+    }
+    #demo-input:focus {
+      outline: none;
+      border-color: rgba(244,196,48,0.35);
+    }
+    #demo-input::placeholder { color: var(--on-surface-variant); }
+    #demo-input:disabled { opacity: 0.5; }
+
+    .demo-send-btn {
+      background: var(--primary);
+      border: none;
+      color: var(--on-primary);
+      font-size: 12px;
+      padding: 9px 18px;
+    }
+    .demo-send-btn:hover:not(:disabled) { background: var(--primary-fixed); }
+    .demo-send-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .demo-load-row {
       display: flex;
       align-items: center;
       gap: 12px;
+      flex-wrap: wrap;
     }
-    #demo-header .dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-    }
-    #demo-model-badge {
-      margin-left: auto;
-      font-size: 11px;
-      color: var(--accent2);
-      background: #0d2f2f;
-      border: 1px solid var(--accent2);
-      padding: 2px 10px;
-      border-radius: 99px;
-    }
-    #demo-status {
-      font-size: 12px;
-      color: var(--muted);
-    }
-    #demo-body {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .demo-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-    #demo-system-prompt {
-      width: 100%;
-      background: #0d0d14;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 14px;
-      color: var(--text);
-      font-size: 13px;
-      font-family: 'Fira Code', monospace;
-      resize: vertical;
-      min-height: 70px;
-      transition: border-color 0.2s;
-    }
-    #demo-system-prompt:focus { outline: none; border-color: var(--accent); }
 
-    .demo-row {
-      display: flex;
-      gap: 8px;
-    }
-    #demo-input {
-      flex: 1;
-      background: #0d0d14;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 14px;
-      color: var(--text);
-      font-size: 14px;
-      transition: border-color 0.2s;
-    }
-    #demo-input:focus { outline: none; border-color: var(--accent); }
-    #demo-input::placeholder { color: var(--muted); }
-
-    #demo-send-btn {
-      background: var(--accent);
-      border: none;
-      border-radius: 8px;
-      padding: 10px 20px;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity 0.2s, background 0.2s;
-      white-space: nowrap;
-    }
-    #demo-send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    #demo-kb-btn {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 14px;
-      color: var(--text);
-      font-size: 13px;
-      cursor: pointer;
-      transition: background 0.2s;
-      white-space: nowrap;
-    }
-    #demo-kb-btn:hover { background: var(--border); }
-
-    #demo-load-btn {
+    .demo-load-btn {
       background: transparent;
-      border: 1px solid var(--accent);
-      border-radius: 8px;
-      padding: 8px 16px;
-      color: var(--accent);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    #demo-load-btn:hover { background: #2a1f5e; }
-    #demo-load-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-    #demo-output {
-      background: #0d0d14;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px;
-      min-height: 80px;
-      font-size: 14px;
-      line-height: 1.7;
-      color: var(--text);
-      white-space: pre-wrap;
-      word-break: break-word;
-      max-height: 200px;
-      overflow-y: auto;
-    }
-
-    .rag-indicator {
+      border: 1px solid rgba(244,196,48,0.35);
+      color: var(--primary);
       font-size: 11px;
-      padding: 2px 10px;
-      border-radius: 99px;
-      background: #0d1f14;
-      color: var(--green);
-      border: 1px solid var(--green);
+      padding: 7px 16px;
+    }
+    .demo-load-btn:hover:not(:disabled) { background: rgba(244,196,48,0.08); }
+    .demo-load-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    #demo-load-progress {
+      font-family: var(--font-body);
+      font-size: 11px;
+      color: var(--on-surface-variant);
     }
 
-    #demo-kb-file { display: none; }
+    #demo-kb-file-input { display: none; }
 
-    /* thinking tokens */
     .think-block {
-      color: #546e7a;
+      color: var(--on-surface-variant);
       font-style: italic;
       font-size: 0.9em;
     }
 
-    /* ── SLIDE 1: TITLE ── */
-    #slide-1 {
-      background:
-        radial-gradient(ellipse 80% 60% at 60% 40%, rgba(124,106,255,0.12) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 40% at 20% 80%, rgba(62,207,207,0.08) 0%, transparent 60%),
-        var(--bg);
-    }
-    #slide-1 .tag-row { justify-content: flex-start; }
-
-    /* ── SLIDE 2: narrative ── */
-    #slide-2 {
-      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255,106,106,0.07) 0%, transparent 70%), var(--bg);
-    }
-
-    /* ── FINAL ── */
-    #slide-final {
-      background:
-        radial-gradient(ellipse 70% 60% at 50% 50%, rgba(124,106,255,0.15) 0%, transparent 70%),
-        var(--bg);
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .cols-2, .cols-3 { grid-template-columns: 1fr; }
-      .slide { padding: 32px 24px; }
-    }
-
-    /* ── ANIMATIONS ── */
-    @keyframes pulse-dot {
+    /* ═══════════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════════ */
+    @keyframes pulse {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
+      50%       { opacity: 0.3; }
     }
-    .pulse { animation: pulse-dot 1.4s ease infinite; }
+    .pulse { animation: pulse 1.6s ease infinite; }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    .spin { animation: spin 1s linear infinite; display: inline-block; }
-
-    /* scroll indicator on demo */
-    .scroll-hint {
-      font-size: 11px;
-      color: var(--muted);
-      text-align: right;
-      margin-top: 2px;
+    /* responsive */
+    @media (max-width: 900px) {
+      :root { --slide-pad-x: 28px; --slide-pad-y: 36px; }
+      .cols-2, .cols-3 { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
 <div id="progress-bar"></div>
-<button class="nav-btn" id="btn-prev">←</button>
-<button class="nav-btn" id="btn-next">→</button>
+<button class="nav-btn" id="btn-prev" aria-label="Previous slide">←</button>
+<button class="nav-btn" id="btn-next" aria-label="Next slide">→</button>
 <span id="slide-counter"></span>
 
 <div class="deck" id="deck">
 
-  <!-- ══════════════════════════════════════════════
-       SLIDE 1 — TITLE
-  ══════════════════════════════════════════════ -->
-  <div class="slide active" id="slide-1">
-    <div class="content-col">
+  <!-- ══════════════════════════════════
+       01 — TITLE
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-1">
+    <div class="content-col" style="max-width:820px;">
       <div class="eyebrow">AI × EI Conference 2026 — Wishford Education</div>
-      <h1>Reclaiming<br><span class="accent">the Narrative</span></h1>
+      <h1 class="display-xl">
+        Reclaiming<br>
+        <span class="text-primary glow-text">the Narrative</span>
+      </h1>
       <div class="divider"></div>
-      <p style="max-width:640px; font-size:1.2rem; color: var(--muted);">
+      <p class="body-lg" style="max-width:600px; color: var(--on-surface-variant);">
         Why <strong>Big Tech doesn't have to write the rules</strong> of AI in education —
-        and how you can build powerful, private, free AI experiences for your students and teachers today.
+        and how you can build powerful, private, free AI experiences for your students
+        and teachers, today, in a browser tab.
       </p>
-      <div class="tag-row">
-        <span class="chip chip-purple">Edge AI</span>
-        <span class="chip chip-teal">Gemma 4</span>
-        <span class="chip chip-teal">Runs in a Browser</span>
-        <span class="chip chip-green">No Data Leaves Your Device</span>
-        <span class="chip chip-red">No Subscription Required</span>
+      <div class="tag-row" style="margin-top:6px;">
+        <span class="chip chip-primary">Edge AI</span>
+        <span class="chip chip-secondary">Gemma 4</span>
+        <span class="chip chip-secondary">Runs in a Browser</span>
+        <span class="chip chip-success">No Data Leaves Device</span>
+        <span class="chip chip-danger">No Subscription</span>
       </div>
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════
-       SLIDE 2 — THE PROBLEM: WHO OWNS THE NARRATIVE?
-  ══════════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════
+       02 — WHO'S WRITING THE SCRIPT?
+  ══════════════════════════════════ -->
   <div class="slide" id="slide-2">
     <div class="content-col">
       <div class="eyebrow">The Problem</div>
-      <h2>Who's been <span class="accent3">writing the script</span>?</h2>
+      <h2 class="headline-lg">Who's been <span class="text-error">writing the script</span>?</h2>
       <div class="divider"></div>
-      <div class="cols-2" style="max-width:960px;">
-        <div class="card card-red">
-          <h3 style="color:var(--accent3);">Big Tech Playbook</h3>
-          <ul class="step-list" style="margin-top:8px;">
-            <li><span>🔒</span><span>Data harvested at scale — your students' prompts become training data</span></li>
-            <li><span>💳</span><span>Premium features gated behind per-seat subscriptions</span></li>
-            <li><span>📋</span><span>Rigid, one-size-fits-all tools that don't fit your context</span></li>
-            <li><span>🌐</span><span>Always-on internet dependency — no connectivity, no AI</span></li>
-            <li><span>🔧</span><span>You consume the product. You don't shape it.</span></li>
+      <div class="cols-2">
+        <div class="card-danger">
+          <p class="headline-md" style="color: var(--error);">Big Tech Playbook</p>
+          <ul class="step-list" style="margin-top:10px;">
+            <li><span class="step-icon">🔒</span><span>Student prompts become training data at scale</span></li>
+            <li><span class="step-icon">💳</span><span>Premium features gated behind per-seat subscriptions</span></li>
+            <li><span class="step-icon">📋</span><span>Rigid, one-size-fits-all tools — no curriculum context</span></li>
+            <li><span class="step-icon">🌐</span><span>Always-on internet dependency: no signal, no AI</span></li>
+            <li><span class="step-icon">🔧</span><span>You consume the product. You don't shape it.</span></li>
           </ul>
         </div>
-        <div class="card card-green">
-          <h3 style="color:var(--green);">What Education Actually Needs</h3>
-          <ul class="step-list" style="margin-top:8px;">
-            <li><span>🧠</span><span>AI that understands <em>your</em> curriculum, context, values</span></li>
-            <li><span>🔐</span><span>Student data that never leaves your school</span></li>
-            <li><span>⚡</span><span>Works offline, in any classroom, on a laptop</span></li>
-            <li><span>🎯</span><span>Purpose-built for specific learners and teachers</span></li>
-            <li><span>🆓</span><span>No per-student cost at point of use</span></li>
+        <div class="card-success">
+          <p class="headline-md" style="color: var(--success);">What Education Actually Needs</p>
+          <ul class="step-list" style="margin-top:10px;">
+            <li><span class="step-icon">🧠</span><span>AI that understands <em>your</em> curriculum, context, values</span></li>
+            <li><span class="step-icon">🔐</span><span>Student data that never leaves your school</span></li>
+            <li><span class="step-icon">⚡</span><span>Works offline, in any classroom, on a laptop</span></li>
+            <li><span class="step-icon">🎯</span><span>Purpose-built for specific learners and teachers</span></li>
+            <li><span class="step-icon">🆓</span><span>No per-student cost at point of use</span></li>
           </ul>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════
-       SLIDE 3 — THE SHIFT: EDGE AI IS HERE
-  ══════════════════════════════════════════════ -->
-  <div class="slide" id="slide-3">
-    <div class="content-col center" style="align-items:center;">
+  <!-- ══════════════════════════════════
+       03 — THE SHIFT
+  ══════════════════════════════════ -->
+  <div class="slide center" id="slide-3">
+    <div class="content-col" style="align-items:center; text-align:center;">
       <div class="eyebrow">The Shift</div>
-      <h2>The model has <span class="accent">left the data centre</span></h2>
-      <div class="divider" style="margin:12px auto;"></div>
-      <div class="cols-3" style="max-width:1000px; margin-top: 8px;">
+      <h2 class="headline-lg">The model has <span class="text-primary glow-text">left the data centre</span></h2>
+      <div class="divider" style="margin: 0 auto;"></div>
+      <div class="cols-3" style="margin-top:8px;">
         <div class="card stat-block">
-          <div class="stat-num accent">1.2<span style="font-size:0.5em;vertical-align:top;margin-top:0.3em;display:inline-block;">GB</span></div>
-          <div class="stat-label">Gemma 4 E2B — full multimodal reasoning model, runs in a browser tab</div>
+          <div class="stat-num">1.2<span class="stat-unit">GB</span></div>
+          <div class="stat-label">Gemma 4 E2B — full multimodal reasoning, runs in a browser tab</div>
         </div>
         <div class="card stat-block">
-          <div class="stat-num accent2">0</div>
-          <div class="stat-label">Bytes sent to any server — pure client-side inference via WebGPU</div>
+          <div class="stat-num text-secondary">0</div>
+          <div class="stat-label">Bytes sent to any server. Pure client-side inference via WebGPU.</div>
         </div>
         <div class="card stat-block">
-          <div class="stat-num green">Free</div>
-          <div class="stat-label">No API key, no account, no subscription needed to run the model</div>
+          <div class="stat-num text-success">Free</div>
+          <div class="stat-label">No API key, no account, no subscription required to run the model.</div>
         </div>
       </div>
-      <p class="muted" style="margin-top:16px; max-width:700px;">
-        Google's <strong>Gemma 4</strong> family, open-weight and Apache 2.0 licensed, runs entirely in the browser via
-        <strong>Transformers.js + WebGPU</strong>. Text, images, thinking mode — all local.
-        The same capability that cost thousands per month two years ago now runs on a school laptop.
+      <p class="body-muted" style="max-width:680px; margin-top:8px;">
+        Google's <strong>Gemma 4</strong> family — open-weight, Apache 2.0 licensed — runs entirely in the browser
+        via <strong>Transformers.js + WebGPU</strong>. Text, images, thinking mode. All local. The capability
+        that cost thousands per month two years ago now runs on a school laptop.
       </p>
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════
-       SLIDE 4 — WHAT IS "EDGE AI"?
-  ══════════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════
+       04 — WHAT IS EDGE AI?
+  ══════════════════════════════════ -->
   <div class="slide" id="slide-4">
     <div class="content-col">
       <div class="eyebrow">Context</div>
-      <h2>What does <span class="accent">"edge AI"</span> actually mean?</h2>
+      <h2 class="headline-lg">What does <span class="text-primary">"edge AI"</span> actually mean?</h2>
       <div class="divider"></div>
       <div class="cols-2">
         <div class="stack">
           <div class="card">
-            <h3>Cloud AI (what you're used to)</h3>
-            <p>Your prompt travels to a data centre (OpenAI, Google, Microsoft). A huge model runs on GPU clusters. A response comes back. <strong>Your data touched someone else's system.</strong></p>
+            <p class="headline-md">Cloud AI — what you're used to</p>
+            <p class="body-md">Your prompt travels to a data centre (OpenAI, Google, Microsoft). A huge model runs on GPU clusters costing millions. A response comes back. <strong>Your data touched someone else's system.</strong></p>
           </div>
-          <div class="card card-accent">
-            <h3>Edge AI (what's now possible)</h3>
-            <p>The model <em>is</em> the browser tab. Your prompt runs on your own hardware — CPU or GPU — using WebAssembly or WebGPU. <strong>Nothing leaves the device. Ever.</strong></p>
+          <div class="card-glass">
+            <p class="headline-md">Edge AI — what's now possible</p>
+            <p class="body-md">The model <em>is</em> the browser tab. Inference runs on your own hardware — CPU or GPU — using WebAssembly or WebGPU. <strong>Nothing leaves the device. Ever.</strong></p>
           </div>
         </div>
-        <div class="stack">
-          <div class="card">
-            <h3>Why now?</h3>
-            <ul class="step-list">
-              <li><span class="step-num">1</span><span>Quantisation: 4-bit models are 4–8× smaller with minimal quality loss</span></li>
-              <li><span class="step-num">2</span><span>WebGPU: browser-native GPU access, no install required</span></li>
-              <li><span class="step-num">3</span><span>Open weights: Gemma, Qwen, Llama, Phi — free to download and run</span></li>
-              <li><span class="step-num">4</span><span>Transformers.js: HuggingFace's library brings the full pipeline to JS</span></li>
-            </ul>
-          </div>
+        <div class="card">
+          <p class="headline-md">Why now?</p>
+          <ul class="step-list" style="margin-top:10px;">
+            <li><span class="step-num">1</span><span><strong>Quantisation</strong> — 4-bit models are 4–8× smaller with minimal quality loss</span></li>
+            <li><span class="step-num">2</span><span><strong>WebGPU</strong> — browser-native GPU access, zero install required</span></li>
+            <li><span class="step-num">3</span><span><strong>Open weights</strong> — Gemma, Qwen, Llama, Phi: free to download and run</span></li>
+            <li><span class="step-num">4</span><span><strong>Transformers.js</strong> — HuggingFace brings the full ML pipeline to JavaScript</span></li>
+            <li><span class="step-num">5</span><span><strong>Device capability</strong> — modern school laptops have integrated GPUs that handle inference</span></li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════
-       SLIDE 5 — THE THREE PILLARS
-  ══════════════════════════════════════════════ -->
-  <div class="slide" id="slide-5">
-    <div class="content-col center" style="align-items:center;">
+  <!-- ══════════════════════════════════
+       05 — THREE PILLARS
+  ══════════════════════════════════ -->
+  <div class="slide center" id="slide-5">
+    <div class="content-col" style="align-items:center; text-align:center;">
       <div class="eyebrow">How It Works</div>
-      <h2>Three pillars of an <span class="accent">educator-owned</span> AI experience</h2>
-      <div class="divider" style="margin: 12px auto;"></div>
-      <div class="cols-3" style="max-width: 1050px;">
-        <div class="card card-accent">
+      <h2 class="headline-lg">Three pillars of an <span class="text-primary">educator-owned</span> AI experience</h2>
+      <div class="divider" style="margin: 0 auto;"></div>
+      <div class="cols-3" style="margin-top:8px; text-align:left;">
+        <div class="card-glass">
           <div style="font-size:2rem; margin-bottom:10px;">🧬</div>
-          <h3>1. The Model</h3>
-          <p>Open-weight, quantised, runs in the browser. No API key. No internet required after first load. Cache once, use offline forever.</p>
+          <p class="headline-md">1. The Model</p>
+          <p class="body-md">Open-weight, quantised, runs in the browser. No API key. No internet required after first load. Cache once, use offline forever.</p>
           <div class="tag-row" style="margin-top:12px;">
-            <span class="chip chip-teal">Gemma 4</span>
-            <span class="chip chip-purple">WebGPU</span>
+            <span class="chip chip-secondary">Gemma 4</span>
+            <span class="chip chip-primary">WebGPU</span>
           </div>
         </div>
-        <div class="card card-accent">
+        <div class="card-glass">
           <div style="font-size:2rem; margin-bottom:10px;">🎭</div>
-          <h3>2. System Prompting</h3>
-          <p>You define who the AI is. A Year 8 debate coach. A SEND reading companion. A teacher's lesson planner. One prompt, entirely different experience.</p>
+          <p class="headline-md">2. System Prompting</p>
+          <p class="body-md">You define who the AI is. A Year 8 debate coach. A SEND reading companion. A teacher's CPD planner. One prompt, entirely different experience.</p>
           <div class="tag-row" style="margin-top:12px;">
-            <span class="chip chip-purple">Persona</span>
-            <span class="chip chip-purple">Tone</span>
-            <span class="chip chip-purple">Constraints</span>
+            <span class="chip chip-primary">Persona</span>
+            <span class="chip chip-primary">Tone</span>
+            <span class="chip chip-primary">Constraints</span>
           </div>
         </div>
-        <div class="card card-accent">
+        <div class="card-glass">
           <div style="font-size:2rem; margin-bottom:10px;">📚</div>
-          <h3>3. Knowledge Base (RAG)</h3>
-          <p>Upload your curriculum docs, marking schemes, SEN profiles. The AI answers from <em>your</em> knowledge, not the public internet. Semantically grounded, locally stored.</p>
+          <p class="headline-md">3. Knowledge Base (RAG)</p>
+          <p class="body-md">Upload your curriculum docs, marking schemes, SEN profiles. The AI answers from <em>your</em> knowledge — not the public internet. Semantically grounded, locally stored.</p>
           <div class="tag-row" style="margin-top:12px;">
-            <span class="chip chip-teal">Your Docs</span>
-            <span class="chip chip-teal">Local Vectors</span>
+            <span class="chip chip-secondary">Your Docs</span>
+            <span class="chip chip-secondary">Local Vectors</span>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════
-       SLIDE 6 — SYSTEM PROMPTING DEEP DIVE
-  ══════════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════
+       06 — SYSTEM PROMPTING DEEP DIVE
+  ══════════════════════════════════ -->
   <div class="slide" id="slide-6">
     <div class="content-col">
       <div class="eyebrow">Pillar 2 — System Prompting</div>
-      <h2>You define the <span class="accent">AI's identity</span></h2>
+      <h2 class="headline-lg">You define the <span class="text-primary">AI's identity</span></h2>
       <div class="divider"></div>
       <div class="cols-2">
         <div class="stack">
-          <p>A system prompt is the instruction that runs <em>before</em> any student interaction. It shapes everything: tone, vocabulary level, what topics to avoid, what role to play.</p>
+          <p class="body-md" style="color:var(--on-surface-variant);">A system prompt is the instruction that runs <em>before</em> any student interaction. It shapes everything: tone, vocabulary level, what topics to avoid, what role to play.</p>
           <div class="card">
-            <h3>Example: Year 6 Reading Companion</h3>
-            <div class="code-block">
-<span class="cm">// System prompt for a primary reading assistant</span>
+            <p class="headline-md">Year 6 Reading Companion</p>
+            <div class="code-block" style="margin-top:8px;">
 <span class="str">"You are Archie, a friendly reading buddy
 for Year 6 pupils aged 10–11.
 Always use simple vocabulary.
-Never give away plot answers — instead
-ask the pupil what THEY think happens next.
-If a pupil seems stuck, offer encouragement
-first. Keep responses under 4 sentences."</span>
+Never give away plot answers — ask the
+pupil what THEY think happens next.
+Keep responses under 4 sentences."</span>
             </div>
           </div>
           <div class="card">
-            <h3>Example: Teacher CPD Planner</h3>
-            <div class="code-block">
-<span class="str">"You are a coaching assistant for teachers
-preparing CPD sessions. Ask clarifying
-questions before making suggestions.
-Ground all advice in the DfE Teachers'
-Standards. Avoid educational jargon."</span>
+            <p class="headline-md">Teacher CPD Planner</p>
+            <div class="code-block" style="margin-top:8px;">
+<span class="str">"You are a coaching assistant for teachers.
+Ask clarifying questions before making
+suggestions. Ground all advice in the DfE
+Teachers' Standards. Avoid edu-jargon."</span>
             </div>
           </div>
         </div>
         <div class="stack">
-          <div class="card card-accent">
-            <h3>What a system prompt controls</h3>
-            <ul class="step-list">
-              <li><span>🎭</span><span><strong>Persona</strong> — name, role, personality</span></li>
-              <li><span>📏</span><span><strong>Reading level</strong> — GCSE, KS2, adult</span></li>
-              <li><span>🚫</span><span><strong>Topic boundaries</strong> — what to refuse or redirect</span></li>
-              <li><span>💬</span><span><strong>Response style</strong> — Socratic, direct, encouraging</span></li>
-              <li><span>🌍</span><span><strong>Values</strong> — your school's ethos, safeguarding tone</span></li>
-              <li><span>📝</span><span><strong>Format</strong> — bullet points, short answers, markdown</span></li>
+          <div class="card-glass">
+            <p class="headline-md">What a system prompt controls</p>
+            <ul class="step-list" style="margin-top:10px;">
+              <li><span class="step-icon">🎭</span><span><strong>Persona</strong> — name, role, personality</span></li>
+              <li><span class="step-icon">📏</span><span><strong>Reading level</strong> — GCSE, KS2, adult</span></li>
+              <li><span class="step-icon">🚫</span><span><strong>Topic boundaries</strong> — what to refuse or redirect</span></li>
+              <li><span class="step-icon">💬</span><span><strong>Response style</strong> — Socratic, direct, encouraging</span></li>
+              <li><span class="step-icon">🌍</span><span><strong>Values</strong> — your school's ethos, safeguarding tone</span></li>
+              <li><span class="step-icon">📝</span><span><strong>Format</strong> — bullet points, short answers, markdown</span></li>
             </ul>
           </div>
-          <p class="muted" style="font-size:0.9rem;">No developer needed. A teacher who knows their learners writes better system prompts than any product manager at a tech company ever will.</p>
+          <div class="quote-block">
+            A teacher who knows their learners writes better system prompts than any product manager at a tech company ever will.
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════
-       SLIDE 7 — RAG DEEP DIVE
-  ══════════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════
+       07 — RAG DEEP DIVE
+  ══════════════════════════════════ -->
   <div class="slide" id="slide-7">
     <div class="content-col">
       <div class="eyebrow">Pillar 3 — Knowledge Base / RAG</div>
-      <h2>The AI knows <span class="accent2">what you teach it</span></h2>
+      <h2 class="headline-lg">The AI knows <span class="text-secondary">what you teach it</span></h2>
       <div class="divider"></div>
       <div class="cols-2">
         <div class="stack">
-          <p>RAG — <strong>Retrieval Augmented Generation</strong> — means the AI searches your uploaded documents before answering, then grounds its response in what it finds.</p>
-          <div class="card card-green">
-            <h3>How it works (locally, in the browser)</h3>
-            <ol class="step-list">
-              <li><span class="step-num">1</span><span>You upload a .txt document — curriculum spec, policy, marking guide</span></li>
-              <li><span class="step-num">2</span><span>It's split into chunks (~500 chars each) and converted to dense vector embeddings</span></li>
-              <li><span class="step-num">3</span><span>Stored in IndexedDB — stays on the device, survives page reloads</span></li>
-              <li><span class="step-num">4</span><span>When a pupil asks something, the most relevant chunks are retrieved</span></li>
-              <li><span class="step-num">5</span><span>Those chunks are injected into the model's context before it replies</span></li>
+          <p class="body-md" style="color:var(--on-surface-variant);"><strong>RAG — Retrieval Augmented Generation</strong> — means the AI searches your uploaded documents before answering, then grounds its response in what it finds.</p>
+          <div class="card-success">
+            <p class="headline-md" style="color:var(--success);">How it works — locally, in the browser</p>
+            <ol class="step-list" style="margin-top:10px;">
+              <li><span class="step-num">1</span><span>Upload a .txt document — curriculum spec, policy, marking guide</span></li>
+              <li><span class="step-num">2</span><span>Split into chunks (~500 chars each) + dense vector embeddings created</span></li>
+              <li><span class="step-num">3</span><span>Stored in IndexedDB — on-device, survives page reloads</span></li>
+              <li><span class="step-num">4</span><span>Pupil asks a question → relevant chunks retrieved</span></li>
+              <li><span class="step-num">5</span><span>Chunks injected into model context before it replies</span></li>
             </ol>
           </div>
         </div>
         <div class="stack">
           <div class="card">
-            <h3>What to upload</h3>
-            <div class="tag-row">
-              <span class="chip chip-teal">AQA Spec</span>
-              <span class="chip chip-teal">School Marking Policy</span>
-              <span class="chip chip-teal">Reading List</span>
-              <span class="chip chip-purple">SEN Guidelines</span>
-              <span class="chip chip-purple">Lesson Plans</span>
-              <span class="chip chip-green">School Handbook</span>
-              <span class="chip chip-green">CPD Notes</span>
-              <span class="chip chip-red">Safeguarding Policy</span>
+            <p class="headline-md">What to upload</p>
+            <div class="tag-row" style="margin-top:8px;">
+              <span class="chip chip-secondary">AQA Spec</span>
+              <span class="chip chip-secondary">School Marking Policy</span>
+              <span class="chip chip-secondary">Reading List</span>
+              <span class="chip chip-primary">SEN Guidelines</span>
+              <span class="chip chip-primary">Lesson Plans</span>
+              <span class="chip chip-success">School Handbook</span>
+              <span class="chip chip-success">CPD Notes</span>
+              <span class="chip chip-danger">Safeguarding Policy</span>
             </div>
           </div>
-          <div class="card card-yellow">
-            <h3 style="color:var(--yellow);">Hybrid scoring — smarter retrieval</h3>
-            <p>Combines <strong>semantic similarity</strong> (meaning) with <strong>keyword matching</strong> (exact terms) — 70/30 blend — so "What does the spec say about quadratics?" finds the right chunk even if it doesn't use the word "spec".</p>
+          <div class="card-glass-secondary">
+            <p class="headline-md">Hybrid scoring — smarter retrieval</p>
+            <p class="body-md">Combines <strong>semantic similarity</strong> (meaning) with <strong>keyword matching</strong> (exact terms) — 70/30 blend. "What does the spec say about quadratics?" finds the right chunk even without the word "spec".</p>
           </div>
-          <p class="muted" style="font-size:0.9rem;">All vectors stored in the browser's IndexedDB. No cloud. No third party. No data protection headache.</p>
+          <p class="body-muted" style="font-size:12px;">All vectors in browser IndexedDB. No cloud. No third party. No data-protection headache.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════
-       SLIDE 8 — LIVE DEMO
-  ══════════════════════════════════════════════ -->
-  <div class="slide" id="slide-8">
-    <div class="eyebrow" style="margin-bottom:12px;">Live Demo — Runs Entirely in This Browser Tab</div>
+  <!-- ══════════════════════════════════
+       08 — LIVE DEMO
+  ══════════════════════════════════ -->
+  <div class="slide center" id="slide-8">
+    <div class="eyebrow" style="margin-bottom:14px;">Live Demo — Runs Entirely in This Browser Tab</div>
     <div id="demo-panel">
-      <div id="demo-header">
-        <div class="dot" style="background:#ff5f56;"></div>
-        <div class="dot" style="background:#ffbd2e;"></div>
-        <div class="dot" style="background:#27c93f;"></div>
-        <span id="demo-status" style="margin-left:4px;">Model not loaded</span>
+      <div id="demo-titlebar">
+        <div class="titlebar-dot" style="background:#ff5f56;"></div>
+        <div class="titlebar-dot" style="background:#ffbd2e;"></div>
+        <div class="titlebar-dot" style="background:#27c93f;"></div>
+        <span id="demo-status-text" style="margin-left:6px;">Model not loaded</span>
         <span id="demo-model-badge">Gemma 4 E2B · WebGPU</span>
       </div>
       <div id="demo-body">
-        <!-- System prompt -->
+
         <div>
-          <div class="demo-label">System Prompt — define who this AI is</div>
+          <div class="demo-field-label">System Prompt — define who this AI is</div>
           <textarea id="demo-system-prompt" spellcheck="false">You are a friendly and encouraging reading assistant for Year 7 students. Use simple, age-appropriate language. When a student asks about a book, help them think critically rather than giving direct answers. Keep responses concise — 3–4 sentences maximum.</textarea>
         </div>
 
-        <!-- Preset buttons -->
-        <div style="display:flex; flex-wrap:wrap; gap:6px;">
-          <span style="font-size:11px; color:var(--muted); align-self:center;">Presets:</span>
-          <button class="demo-preset-btn" onclick="setPreset('reading')">📖 Reading Buddy</button>
-          <button class="demo-preset-btn" onclick="setPreset('debate')">🎙️ Debate Coach</button>
-          <button class="demo-preset-btn" onclick="setPreset('maths')">📐 Maths Tutor</button>
-          <button class="demo-preset-btn" onclick="setPreset('cpd')">🧑‍🏫 CPD Coach</button>
-          <button class="demo-preset-btn" onclick="setPreset('socratic')">🦉 Socratic</button>
+        <div class="preset-row">
+          <span class="preset-label">Presets:</span>
+          <button class="preset-btn" onclick="setPreset('reading')">📖 Reading Buddy</button>
+          <button class="preset-btn" onclick="setPreset('debate')">🎙️ Debate Coach</button>
+          <button class="preset-btn" onclick="setPreset('maths')">📐 Maths Tutor</button>
+          <button class="preset-btn" onclick="setPreset('cpd')">🧑‍🏫 CPD Coach</button>
+          <button class="preset-btn" onclick="setPreset('socratic')">🦉 Socratic</button>
         </div>
 
-        <!-- KB row -->
-        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-          <div class="demo-label" style="margin:0;">Knowledge Base:</div>
-          <button id="demo-kb-btn" onclick="document.getElementById('demo-kb-file').click()">+ Upload .txt doc</button>
-          <input type="file" id="demo-kb-file" accept=".txt,.md" multiple onchange="handleKBUpload(event)" />
-          <span id="kb-status" style="font-size:12px; color:var(--muted);">No docs loaded</span>
-          <span id="rag-active-badge" class="rag-indicator" style="display:none;">RAG active</span>
+        <div class="kb-row">
+          <div class="demo-field-label" style="margin:0;">Knowledge Base:</div>
+          <button class="kb-btn" onclick="document.getElementById('demo-kb-file-input').click()">+ Upload .txt doc</button>
+          <input type="file" id="demo-kb-file-input" accept=".txt,.md" multiple onchange="handleKBUpload(event)" />
+          <span id="kb-status">No docs loaded</span>
+          <span id="rag-active-badge">RAG active</span>
         </div>
 
-        <!-- Chat output -->
         <div>
-          <div class="demo-label">Response</div>
-          <div id="demo-output" class="muted">Load the model below, then type a message to see your AI persona in action.</div>
-          <div class="scroll-hint">scroll if needed ↕</div>
+          <div class="demo-field-label">Response</div>
+          <div id="demo-output" style="color:var(--on-surface-variant);">Load the model below, then type a message to see your AI persona in action.</div>
         </div>
 
-        <!-- Input row -->
-        <div class="demo-row">
-          <input id="demo-input" type="text" placeholder="Ask something… e.g. 'What themes are in Of Mice and Men?'" disabled
-                 onkeydown="if(event.key==='Enter') sendDemo()" />
-          <button id="demo-kb-btn" onclick="document.getElementById('demo-kb-file').click()" style="display:none;"></button>
-          <button id="demo-send-btn" disabled onclick="sendDemo()">Send</button>
+        <div class="demo-input-row">
+          <input id="demo-input" type="text" placeholder="e.g. 'What themes appear in Of Mice and Men?'" disabled onkeydown="if(event.key==='Enter') sendDemo()" />
+          <button class="demo-send-btn" id="demo-send-btn" disabled onclick="sendDemo()">Send →</button>
         </div>
 
-        <!-- Load button -->
-        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-          <button id="demo-load-btn" onclick="loadDemoModel()">⚡ Load Gemma 4 in Browser (~1.2 GB, cached after first load)</button>
-          <span id="demo-load-progress" style="font-size:12px; color:var(--muted);"></span>
+        <div class="demo-load-row">
+          <button class="demo-load-btn" id="demo-load-btn" onclick="loadDemoModel()">⚡ Load Gemma 4 in Browser (~1.2 GB, cached after first load)</button>
+          <span id="demo-load-progress"></span>
         </div>
+
       </div>
     </div>
-
-    <style>
-      .demo-preset-btn {
-        background: var(--surface2);
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        padding: 4px 12px;
-        color: var(--text);
-        font-size: 12px;
-        cursor: pointer;
-        transition: background 0.2s, border-color 0.2s;
-      }
-      .demo-preset-btn:hover { background: var(--border); border-color: var(--accent); }
-    </style>
   </div>
 
-  <!-- ══════════════════════════════════════════════
-       SLIDE 9 — THE CODE (HOW IT'S BUILT)
-  ══════════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════
+       09 — THE CODE
+  ══════════════════════════════════ -->
   <div class="slide" id="slide-9">
     <div class="content-col">
-      <div class="eyebrow">Under the Hood — thinkhere-app (open source)</div>
-      <h2>Just <span class="accent">HTML + JS</span>. No backend. No cloud.</h2>
+      <div class="eyebrow">Under the Hood — thinkhere-app (open source, Apache 2.0)</div>
+      <h2 class="headline-lg">Just <span class="text-primary">HTML + JS</span>. No backend. No cloud.</h2>
       <div class="divider"></div>
       <div class="cols-2">
         <div class="stack">
           <div class="card">
-            <h3>Loading Gemma 4 in a browser</h3>
-            <div class="code-block">
-<span class="kw">import</span> { pipeline } <span class="kw">from</span> <span class="str">'@huggingface/transformers'</span>;
+            <p class="headline-md">Loading Gemma 4 in a browser</p>
+            <div class="code-block" style="margin-top:8px;">
+<span class="kw">import</span> { Gemma4ForConditionalGeneration }
+  <span class="kw">from</span> <span class="str">'@huggingface/transformers'</span>;
 
-<span class="cm">// Point to public model CDN — or your own</span>
+<span class="cm">// Point to CDN — or host your own weights</span>
 env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
 
-<span class="cm">// Load quantised model (4-bit = ~1.2GB)</span>
 <span class="kw">const</span> model = <span class="kw">await</span> <span class="fn">Gemma4ForConditionalGeneration</span>
-  .from_pretrained(<span class="str">"onnx-community/gemma-4-E2B-it-ONNX"</span>, {
-    dtype: <span class="str">"q4f16"</span>,
-    device: <span class="str">"webgpu"</span>,  <span class="cm">// GPU in the browser</span>
+  .<span class="fn">from_pretrained</span>(<span class="str">"onnx-community/gemma-4-E2B-it-ONNX"</span>, {
+    dtype: <span class="str">"q4f16"</span>,   <span class="cm">// 4-bit quantised</span>
+    device: <span class="str">"webgpu"</span>, <span class="cm">// GPU in the browser</span>
   });
             </div>
           </div>
           <div class="card">
-            <h3>Injecting the system prompt</h3>
-            <div class="code-block">
-<span class="kw">const</span> messages = [
-  { role: <span class="str">"user"</span>, content: [{
-    type: <span class="str">"text"</span>,
-    text: <span class="cm">/* system prompt */</span> + <span class="str">"\n\n"</span> + userMessage
-  }]}
-];
-<span class="cm">// Gemma prepends system to first user turn</span>
+            <p class="headline-md">Injecting the system prompt</p>
+            <div class="code-block" style="margin-top:8px;">
+<span class="cm">// System prompt prepended to first user turn</span>
+<span class="kw">const</span> messages = [{
+  role: <span class="str">"user"</span>,
+  content: [{ type: <span class="str">"text"</span>,
+    text: systemPrompt + <span class="str">"\n\n"</span> + userMessage
+  }]
+}];
 <span class="kw">const</span> prompt = processor.<span class="fn">apply_chat_template</span>(
   messages, { add_generation_prompt: <span class="kw">true</span> }
 );
@@ -883,31 +1098,27 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
         </div>
         <div class="stack">
           <div class="card">
-            <h3>RAG: retrieve relevant chunks</h3>
-            <div class="code-block">
+            <p class="headline-md">RAG — retrieve relevant chunks</p>
+            <div class="code-block" style="margin-top:8px;">
 <span class="cm">// Hybrid: 70% semantic + 30% keyword</span>
-<span class="kw">const</span> scored = allChunks.<span class="fn">map</span>(chunk => {
-  <span class="kw">const</span> semantic = <span class="fn">cosineSimilarity</span>(
-    queryEmbedding, chunk.embedding
-  );
-  <span class="kw">const</span> keyword  = <span class="fn">keywordScore</span>(query, chunk.text);
-  <span class="kw">return</span> { ...chunk,
-    score: <span class="num">0.7</span> * semantic + <span class="num">0.3</span> * keyword };
-});
-
+<span class="kw">const</span> scored = allChunks.<span class="fn">map</span>(chunk => ({
+  ...chunk,
+  score: <span class="num">0.7</span> * <span class="fn">cosineSimilarity</span>(queryEmb, chunk.emb)
+       + <span class="num">0.3</span> * <span class="fn">keywordScore</span>(query, chunk.text)
+}));
 <span class="kw">const</span> context = scored
   .<span class="fn">filter</span>(c => c.score >= <span class="num">0.15</span>)
-  .<span class="fn">sort</span>((a,b) => b.score - a.score)
+  .<span class="fn">sort</span>((a, b) => b.score - a.score)
   .<span class="fn">slice</span>(<span class="num">0</span>, <span class="num">3000</span> <span class="cm">/* chars */</span>);
             </div>
           </div>
-          <div class="card card-accent">
-            <h3>Full pipeline cost</h3>
-            <ul class="step-list">
-              <li><span>💰</span><span>Model weights: <strong>free</strong> (open weights)</span></li>
-              <li><span>🖥️</span><span>Inference: <strong>free</strong> (your device's GPU)</span></li>
-              <li><span>☁️</span><span>Hosting: <strong>GitHub Pages</strong> (free)</span></li>
-              <li><span>🔑</span><span>API key: <strong>none required</strong></span></li>
+          <div class="card-glass">
+            <p class="headline-md">Total pipeline cost</p>
+            <ul class="step-list" style="margin-top:10px;">
+              <li><span class="step-icon">💰</span><span>Model weights: <strong style="color:var(--success);">free</strong> (open weights, Apache 2.0)</span></li>
+              <li><span class="step-icon">🖥️</span><span>Inference: <strong style="color:var(--success);">free</strong> (your device's own GPU)</span></li>
+              <li><span class="step-icon">☁️</span><span>Hosting: <strong style="color:var(--success);">free</strong> (GitHub Pages)</span></li>
+              <li><span class="step-icon">🔑</span><span>API key: <strong style="color:var(--success);">none required</strong></span></li>
             </ul>
           </div>
         </div>
@@ -915,78 +1126,78 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════
-       SLIDE 10 — USE CASES
-  ══════════════════════════════════════════════ -->
-  <div class="slide" id="slide-10">
-    <div class="content-col center" style="align-items:center;">
+  <!-- ══════════════════════════════════
+       10 — USE CASES
+  ══════════════════════════════════ -->
+  <div class="slide center" id="slide-10">
+    <div class="content-col" style="align-items:center; text-align:center;">
       <div class="eyebrow">Real Scenarios</div>
-      <h2>What could <em>you</em> build <span class="accent">this term</span>?</h2>
-      <div class="divider" style="margin:12px auto;"></div>
-      <div class="cols-3" style="max-width:1050px;">
+      <h2 class="headline-lg">What could <em>you</em> build <span class="text-primary">this term</span>?</h2>
+      <div class="divider" style="margin:0 auto;"></div>
+      <div class="cols-3" style="margin-top:8px; text-align:left;">
         <div class="card">
-          <div style="font-size:1.8rem; margin-bottom:8px;">📖</div>
-          <h3>GCSE English tutor</h3>
-          <p>Upload the AQA spec + a set text extract. Students ask questions. AI answers only from the spec. No hallucination about texts it hasn't seen.</p>
+          <div style="font-size:1.6rem; margin-bottom:6px;">📖</div>
+          <p class="headline-md">GCSE English tutor</p>
+          <p class="body-md">Upload the AQA spec + a set text. Students ask questions. AI answers only from the spec — no hallucination about texts it hasn't seen.</p>
         </div>
         <div class="card">
-          <div style="font-size:1.8rem; margin-bottom:8px;">🤝</div>
-          <h3>SEND support tool</h3>
-          <p>System prompt: reads at Flesch–Kincaid Grade 3. Upload EHCP summary. Personalised responses that match the pupil's documented needs.</p>
+          <div style="font-size:1.6rem; margin-bottom:6px;">🤝</div>
+          <p class="headline-md">SEND support tool</p>
+          <p class="body-md">System prompt at Flesch–Kincaid Grade 3. Upload EHCP summary. Personalised responses matching the pupil's documented needs.</p>
         </div>
         <div class="card">
-          <div style="font-size:1.8rem; margin-bottom:8px;">🧑‍🏫</div>
-          <h3>Teacher CPD assistant</h3>
-          <p>Upload your school's appraisal policy + Teachers' Standards. Staff can ask about their targets in natural language. Fully private.</p>
+          <div style="font-size:1.6rem; margin-bottom:6px;">🧑‍🏫</div>
+          <p class="headline-md">Teacher CPD assistant</p>
+          <p class="body-md">Upload your appraisal policy + Teachers' Standards. Staff ask about targets in natural language. Fully private.</p>
         </div>
         <div class="card">
-          <div style="font-size:1.8rem; margin-bottom:8px;">🎙️</div>
-          <h3>Debate & oracy coach</h3>
-          <p>AI argues the other side. Upload debate motion + argument frameworks. Develops critical thinking without internet access.</p>
+          <div style="font-size:1.6rem; margin-bottom:6px;">🎙️</div>
+          <p class="headline-md">Debate & oracy coach</p>
+          <p class="body-md">AI argues the other side. Upload motion + argument frameworks. Critical thinking without internet access.</p>
         </div>
         <div class="card">
-          <div style="font-size:1.8rem; margin-bottom:8px;">🌍</div>
-          <h3>EAL language buddy</h3>
-          <p>System prompt in English and L1. Vocabulary scaffolding. Upload a glossary of subject-specific terms from your scheme of work.</p>
+          <div style="font-size:1.6rem; margin-bottom:6px;">🌍</div>
+          <p class="headline-md">EAL language buddy</p>
+          <p class="body-md">System prompt in English and L1. Vocabulary scaffolding. Upload a subject-specific glossary from your scheme of work.</p>
         </div>
         <div class="card">
-          <div style="font-size:1.8rem; margin-bottom:8px;">📊</div>
-          <h3>Data & assessment tool</h3>
-          <p>Upload anonymised tracking data. Ask "which pupils are behind on SPaG?" Gets answers from your own data, privately, instantly.</p>
+          <div style="font-size:1.6rem; margin-bottom:6px;">📊</div>
+          <p class="headline-md">Assessment tool</p>
+          <p class="body-md">Upload anonymised tracking data. Ask "which pupils are behind on SPaG?" Answers from your own data, privately, instantly.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════
-       SLIDE 11 — DATA & SAFEGUARDING
-  ══════════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════
+       11 — DATA & SAFEGUARDING
+  ══════════════════════════════════ -->
   <div class="slide" id="slide-11">
     <div class="content-col">
       <div class="eyebrow">Safeguarding & Data Protection</div>
-      <h2>What happens to <span class="accent2">student data</span>?</h2>
+      <h2 class="headline-lg">What happens to <span class="text-secondary">student data</span>?</h2>
       <div class="divider"></div>
       <div class="cols-2">
-        <div class="card card-green">
-          <h3 style="color:var(--green);">With this approach</h3>
-          <ul class="step-list" style="margin-top:8px;">
-            <li><span>✅</span><span>All inference happens on the device — zero network requests</span></li>
-            <li><span>✅</span><span>Conversation history stored in browser's IndexedDB — local only</span></li>
-            <li><span>✅</span><span>Knowledge base docs stored locally as embeddings</span></li>
-            <li><span>✅</span><span>No account required — no identity linkage</span></li>
-            <li><span>✅</span><span>GDPR friendly by design — no processor agreement needed</span></li>
-            <li><span>✅</span><span>Works on an air-gapped school network</span></li>
+        <div class="card-success">
+          <p class="headline-md" style="color:var(--success);">With this approach</p>
+          <ul class="step-list" style="margin-top:10px;">
+            <li><span class="step-icon">✅</span><span>All inference on-device — zero network requests during use</span></li>
+            <li><span class="step-icon">✅</span><span>Conversation history in browser's IndexedDB — local only</span></li>
+            <li><span class="step-icon">✅</span><span>Knowledge base stored locally as embeddings</span></li>
+            <li><span class="step-icon">✅</span><span>No account required — no identity linkage</span></li>
+            <li><span class="step-icon">✅</span><span>GDPR-friendly by design — no processor agreement needed</span></li>
+            <li><span class="step-icon">✅</span><span>Works on an air-gapped school network</span></li>
           </ul>
         </div>
         <div class="stack">
-          <div class="card card-red">
-            <h3 style="color:var(--accent3);">What Big Tech tools require</h3>
-            <ul class="step-list">
-              <li><span>⚠️</span><span>Student data processed on third-party servers</span></li>
-              <li><span>⚠️</span><span>Data retention and training policies vary — and change</span></li>
-              <li><span>⚠️</span><span>US-based cloud = Schrems II / international transfer risk</span></li>
-              <li><span>⚠️</span><span>Age-verification obligations for under-13s</span></li>
-              <li><span>⚠️</span><span>DPA / data processor agreement required</span></li>
+          <div class="card-danger">
+            <p class="headline-md" style="color:var(--error);">What Big Tech tools require</p>
+            <ul class="step-list" style="margin-top:10px;">
+              <li><span class="step-icon">⚠️</span><span>Student data processed on third-party servers</span></li>
+              <li><span class="step-icon">⚠️</span><span>Data retention policies vary — and change without notice</span></li>
+              <li><span class="step-icon">⚠️</span><span>US-based cloud = Schrems II / international transfer risk</span></li>
+              <li><span class="step-icon">⚠️</span><span>Age-verification obligations for under-13s</span></li>
+              <li><span class="step-icon">⚠️</span><span>DPA / data processor agreement required</span></li>
             </ul>
           </div>
           <div class="quote-block">
@@ -997,76 +1208,77 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════
-       SLIDE 12 — THE BROADER POINT
-  ══════════════════════════════════════════════ -->
-  <div class="slide" id="slide-12">
-    <div class="content-col center" style="align-items:center;">
+  <!-- ══════════════════════════════════
+       12 — THE BIGGER POINT
+  ══════════════════════════════════ -->
+  <div class="slide center" id="slide-12">
+    <div class="content-col" style="align-items:center; text-align:center;">
       <div class="eyebrow">The Bigger Picture</div>
-      <h2>This isn't about the <span class="accent3">tech</span>.<br>It's about <span class="accent">agency</span>.</h2>
-      <div class="divider" style="margin:12px auto;"></div>
-      <div class="cols-2" style="max-width:960px; margin-top:8px;">
+      <h2 class="headline-lg">This isn't about the <span class="text-error">tech</span>.<br>It's about <span class="text-primary glow-text">agency</span>.</h2>
+      <div class="divider" style="margin:0 auto;"></div>
+      <div class="cols-2" style="margin-top:8px; text-align:left;">
         <div class="card">
-          <h3>The EdTech consumption trap</h3>
-          <p>Every platform you pay for shapes what's possible in your classroom. The vendor decides the features. The vendor decides the data policy. The vendor decides when to sunset it.</p>
-          <p style="margin-top:12px;" class="muted">Schools have been consumers of technology. This is a moment to become <strong>makers</strong> of it.</p>
+          <p class="headline-md">The EdTech consumption trap</p>
+          <p class="body-md">Every platform you pay for shapes what's possible in your classroom. The vendor decides the features. The vendor decides the data policy. The vendor decides when to sunset it.</p>
+          <p class="body-md" style="margin-top:12px; color:var(--on-surface-variant);">Schools have been <em>consumers</em> of technology. This is a moment to become <strong>makers</strong> of it.</p>
         </div>
-        <div class="card card-accent">
-          <h3>What reclaiming the narrative looks like</h3>
-          <ul class="step-list" style="margin-top:8px;">
-            <li><span>🌱</span><span><strong>Teacher agency</strong> — you write the system prompt, not a PM in San Francisco</span></li>
-            <li><span>🔍</span><span><strong>Curriculum grounding</strong> — AI knows what you teach, not what's trending</span></li>
-            <li><span>🏫</span><span><strong>School ownership</strong> — the tool lives on your device, follows your values</span></li>
-            <li><span>⚖️</span><span><strong>No gatekeeping</strong> — every school, however funded, can access this</span></li>
+        <div class="card-glass">
+          <p class="headline-md">What reclaiming the narrative looks like</p>
+          <ul class="step-list" style="margin-top:10px;">
+            <li><span class="step-icon">🌱</span><span><strong>Teacher agency</strong> — you write the system prompt, not a PM in San Francisco</span></li>
+            <li><span class="step-icon">🔍</span><span><strong>Curriculum grounding</strong> — AI knows what <em>you</em> teach, not what's trending</span></li>
+            <li><span class="step-icon">🏫</span><span><strong>School ownership</strong> — the tool lives on your device, follows your values</span></li>
+            <li><span class="step-icon">⚖️</span><span><strong>No gatekeeping</strong> — every school, however funded, can access this</span></li>
           </ul>
         </div>
       </div>
-      <p style="max-width:720px; margin-top: 20px; font-size:1.1rem; color: var(--muted);">
-        The intelligence is becoming a <strong>commodity</strong>. What will differentiate your school is not which AI you subscribe to — it's <strong>what you do with it</strong>.
+      <p class="body-muted" style="max-width:700px; margin-top:16px;">
+        The intelligence is becoming a <strong>commodity</strong>. What differentiates your school isn't which AI you subscribe to —
+        it's <strong>what you do with it</strong>.
       </p>
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════
-       SLIDE 13 — GET STARTED
-  ══════════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════
+       13 — GET STARTED
+  ══════════════════════════════════ -->
   <div class="slide" id="slide-13">
     <div class="content-col">
       <div class="eyebrow">Getting Started Today</div>
-      <h2>From zero to working AI tool <span class="accent">in under an hour</span></h2>
+      <h2 class="headline-lg">From zero to working AI tool <span class="text-primary">in under an hour</span></h2>
       <div class="divider"></div>
       <div class="cols-2">
         <div class="stack">
-          <div class="card card-green">
-            <h3>Minimum viable setup</h3>
-            <ol class="step-list">
-              <li><span class="step-num">1</span><span>Copy the HTML template from <strong>thinkhere-app</strong> (open source, Apache 2.0)</span></li>
-              <li><span class="step-num">2</span><span>Edit the system prompt — describe your learners, tone, role</span></li>
-              <li><span class="step-num">3</span><span>Host on GitHub Pages — free, no server, no config</span></li>
+          <div class="card-success">
+            <p class="headline-md" style="color:var(--success);">Minimum viable setup</p>
+            <ol class="step-list" style="margin-top:10px;">
+              <li><span class="step-num">1</span><span>Fork <strong>thinkhere-app</strong> — open source, Apache 2.0</span></li>
+              <li><span class="step-num">2</span><span>Edit the system prompt to describe your learners, tone, role</span></li>
+              <li><span class="step-num">3</span><span>Push to GitHub, enable Pages from repo settings</span></li>
               <li><span class="step-num">4</span><span>Share the URL with your class — it just works</span></li>
             </ol>
           </div>
           <div class="card">
-            <h3>To add a knowledge base</h3>
-            <ol class="step-list">
+            <p class="headline-md">To add a knowledge base</p>
+            <ol class="step-list" style="margin-top:10px;">
               <li><span class="step-num">+</span><span>Export your curriculum doc as .txt</span></li>
               <li><span class="step-num">+</span><span>Upload via the KB button in the UI</span></li>
-              <li><span class="step-num">+</span><span>It embeds locally — done</span></li>
+              <li><span class="step-num">+</span><span>It embeds locally in seconds — done</span></li>
             </ol>
           </div>
         </div>
         <div class="stack">
-          <div class="card card-yellow">
-            <h3 style="color:var(--yellow);">You don't need to be a developer</h3>
-            <p>Writing a system prompt is closer to writing a lesson plan than writing code. If you can describe to a teaching assistant how you want them to behave in your classroom, you can write a system prompt.</p>
+          <div class="card-glass">
+            <p class="headline-md">You don't need to be a developer</p>
+            <p class="body-md">Writing a system prompt is closer to writing a lesson plan than writing code. If you can describe to a teaching assistant how you want them to behave in your classroom, you can write a system prompt.</p>
           </div>
           <div class="card">
-            <h3>What you do need</h3>
-            <ul class="step-list">
-              <li><span>💻</span><span>A modern laptop or desktop (GPU preferred, not required)</span></li>
-              <li><span>🌐</span><span>Chrome or Edge (WebGPU support)</span></li>
-              <li><span>📶</span><span>Internet once to download the model (~1.2 GB, then cached)</span></li>
-              <li><span>⏱️</span><span>About 30 minutes to build your first persona</span></li>
+            <p class="headline-md">What you do need</p>
+            <ul class="step-list" style="margin-top:10px;">
+              <li><span class="step-icon">💻</span><span>A modern laptop or desktop (GPU preferred, not required)</span></li>
+              <li><span class="step-icon">🌐</span><span>Chrome or Edge (for WebGPU support)</span></li>
+              <li><span class="step-icon">📶</span><span>Internet once to download the model (~1.2 GB, then cached)</span></li>
+              <li><span class="step-icon">⏱️</span><span>About 30 minutes to build your first persona</span></li>
             </ul>
           </div>
         </div>
@@ -1074,37 +1286,40 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════
-       SLIDE FINAL — CALL TO ACTION
-  ══════════════════════════════════════════════ -->
-  <div class="slide" id="slide-final">
-    <div class="content-col center" style="align-items:center; gap:24px;">
-      <div class="eyebrow">AI × EI Conference 2026</div>
-      <h1 style="font-size: clamp(2.2rem, 5vw, 3.8rem);">The narrative is <span class="accent">yours</span><br>to write.</h1>
-      <div class="divider" style="margin: 0 auto;"></div>
-      <p style="max-width:680px; font-size: 1.15rem; color:var(--muted);">
+  <!-- ══════════════════════════════════
+       14 — FINAL
+  ══════════════════════════════════ -->
+  <div class="slide center" id="slide-final">
+    <div class="content-col" style="align-items:center; text-align:center; gap:22px;">
+      <div class="eyebrow">AI × EI Conference 2026 — Wishford Education</div>
+      <h1 class="display-xl" style="font-size: clamp(48px, 6vw, 72px);">
+        The narrative is<br>
+        <span class="text-primary glow-text">yours to write.</span>
+      </h1>
+      <div class="divider" style="margin:0 auto;"></div>
+      <p class="body-lg" style="max-width:640px; color:var(--on-surface-variant);">
         Big Tech built the infrastructure. The open-source community opened the weights.
         The browser brought it to the edge. <strong>You bring the pedagogy.</strong>
       </p>
-      <div class="cols-3" style="margin-top:8px; max-width:900px;">
-        <div class="card center">
-          <div style="font-size:1.5rem; margin-bottom:8px;">🔧</div>
-          <h3>thinkhere-app</h3>
-          <p class="muted" style="font-size:0.9rem;">Open source. Fork it. Build your own version. No permission needed.</p>
+      <div class="cols-3" style="margin-top:8px; max-width:900px; text-align:left;">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:1.4rem; margin-bottom:8px;">🔧</div>
+          <p class="headline-md" style="color:var(--on-surface);">thinkhere-app</p>
+          <p class="body-muted" style="font-size:12px;">Open source. Fork it. Build your version. No permission needed.</p>
         </div>
-        <div class="card center">
-          <div style="font-size:1.5rem; margin-bottom:8px;">🎓</div>
-          <h3>Start with one class</h3>
-          <p class="muted" style="font-size:0.9rem;">Pick one use case, one group of students, one doc to upload. Ship it this term.</p>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:1.4rem; margin-bottom:8px;">🎓</div>
+          <p class="headline-md" style="color:var(--on-surface);">Start with one class</p>
+          <p class="body-muted" style="font-size:12px;">One use case, one group, one doc. Ship it this term.</p>
         </div>
-        <div class="card center">
-          <div style="font-size:1.5rem; margin-bottom:8px;">🤝</div>
-          <h3>Share what you build</h3>
-          <p class="muted" style="font-size:0.9rem;">System prompts that work are worth sharing. Build a library together.</p>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:1.4rem; margin-bottom:8px;">🤝</div>
+          <p class="headline-md" style="color:var(--on-surface);">Share what you build</p>
+          <p class="body-muted" style="font-size:12px;">System prompts that work are worth sharing. Build a library together.</p>
         </div>
       </div>
-      <p style="font-size: 0.9rem; color: var(--muted); margin-top: 8px;">
-        Slides hosted via GitHub Pages · Built with HTML, Transformers.js, Gemma 4 · No tracking, no cookies, no cloud
+      <p style="font-family:var(--font-display); font-size:11px; letter-spacing:0.06em; color:var(--on-surface-variant); margin-top:8px;">
+        Hosted via GitHub Pages · Built with HTML &amp; Transformers.js · Gemma 4 · No tracking, no cookies, no cloud
       </p>
     </div>
   </div>
@@ -1115,7 +1330,7 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
      SCRIPTS
 ══════════════════════════════════════════════ -->
 <script type="module">
-  // ── SLIDE NAVIGATION ──
+  // ── NAVIGATION ──
   const slides = Array.from(document.querySelectorAll('.slide'));
   let current = 0;
 
@@ -1132,19 +1347,19 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
   document.getElementById('btn-prev').addEventListener('click', () => goTo(current - 1));
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
-    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')                    { e.preventDefault(); goTo(current - 1); }
+    if (['ArrowRight','ArrowDown',' '].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
+    if (['ArrowLeft','ArrowUp'].includes(e.key))        { e.preventDefault(); goTo(current - 1); }
   });
 
   goTo(0);
 
-  // ── DEMO: SYSTEM PROMPT PRESETS ──
+  // ── DEMO: PRESETS ──
   const PRESETS = {
     reading:  `You are Archie, a friendly reading buddy for Year 7 students aged 11–12. Use simple, encouraging language. Never just give plot answers — ask the student what THEY think. Keep responses to 3–4 sentences.`,
     debate:   `You are a debate coach for Sixth Form students. Always argue the opposing side of whatever position the student takes. Push back with evidence and rhetorical questions. Be challenging but fair.`,
-    maths:    `You are a patient maths tutor for GCSE students. When a student gets stuck, don't give the answer — instead ask a guiding question that helps them figure out the next step themselves. Use plain language, no jargon.`,
+    maths:    `You are a patient maths tutor for GCSE students. When a student gets stuck, never give the answer — ask a guiding question that helps them figure out the next step. Use plain language, no jargon.`,
     cpd:      `You are a professional coaching assistant for teachers. Help staff reflect on their practice by asking open questions. Ground all advice in the DfE Teachers' Standards. Avoid edu-jargon. Ask one question at a time.`,
-    socratic: `You are a Socratic tutor. You never give direct answers. You only respond with questions that help the learner think more deeply. Every response must end with a question. Be warm but intellectually rigorous.`,
+    socratic: `You are a Socratic tutor. You never give direct answers — only questions that help the learner think more deeply. Every response must end with a question. Be warm but intellectually rigorous.`,
   };
 
   window.setPreset = function(key) {
@@ -1152,51 +1367,44 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
     if (el && PRESETS[key]) el.value = PRESETS[key];
   };
 
-  // ── DEMO: MODEL LOADING ──
+  // ── DEMO: MODEL ──
   let demoModel = null;
   let demoProcessor = null;
   let demoTokenizer = null;
   let demoTJS = null;
   let demoReady = false;
 
-  // Simple IndexedDB for KB
-  let demoKB = [];          // { text, embedding }
-  let embPipeline = null;
-
   window.loadDemoModel = async function() {
-    const btn    = document.getElementById('demo-load-btn');
-    const status = document.getElementById('demo-status');
-    const prog   = document.getElementById('demo-load-progress');
+    const loadBtn = document.getElementById('demo-load-btn');
+    const status  = document.getElementById('demo-status-text');
+    const prog    = document.getElementById('demo-load-progress');
 
-    btn.disabled = true;
-    btn.textContent = '⏳ Loading…';
+    loadBtn.disabled = true;
+    loadBtn.textContent = '⏳ Loading…';
     status.textContent = 'Importing Transformers.js…';
 
     try {
       const TJS_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.2/dist/transformers.min.js';
       demoTJS = await import(TJS_URL);
-
-      if (demoTJS.env) {
-        demoTJS.env.allowLocalModels = false;
-      }
+      if (demoTJS.env) demoTJS.env.allowLocalModels = false;
 
       status.textContent = 'Downloading Gemma 4 (~1.2 GB, cached after first load)…';
 
-      const progressCb = (p) => {
+      const progressCb = p => {
         if (p && p.progress != null) {
           const pct = Math.round(p.progress);
-          prog.textContent = `${pct}% — ${p.file || ''}`;
-          status.textContent = `Downloading model… ${pct}%`;
+          prog.textContent = `${pct}%${p.file ? ' — ' + p.file : ''}`;
+          status.textContent = `Downloading… ${pct}%`;
         }
       };
 
       const modelId = 'onnx-community/gemma-4-E2B-it-ONNX';
-
-      demoProcessor = await (demoTJS.Gemma4Processor ?? demoTJS.AutoProcessor).from_pretrained(modelId, { progress_callback: progressCb });
+      const ProcessorClass = demoTJS.Gemma4Processor ?? demoTJS.AutoProcessor;
+      demoProcessor = await ProcessorClass.from_pretrained(modelId, { progress_callback: progressCb });
       demoTokenizer = demoProcessor.tokenizer;
 
-      const Gemma4Class = demoTJS.Gemma4ForConditionalGeneration ?? demoTJS.AutoModelForCausalLM;
-      demoModel = await Gemma4Class.from_pretrained(modelId, {
+      const ModelClass = demoTJS.Gemma4ForConditionalGeneration ?? demoTJS.AutoModelForCausalLM;
+      demoModel = await ModelClass.from_pretrained(modelId, {
         dtype: 'q4f16',
         device: 'webgpu',
         progress_callback: progressCb,
@@ -1205,7 +1413,7 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
       demoReady = true;
       status.textContent = 'Gemma 4 E2B ready';
       prog.textContent = '';
-      btn.textContent = '✅ Model loaded';
+      loadBtn.textContent = '✅ Model loaded';
       document.getElementById('demo-input').disabled = false;
       document.getElementById('demo-send-btn').disabled = false;
 
@@ -1213,20 +1421,20 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
       console.error(err);
       status.textContent = 'Load failed — see console';
       prog.textContent = err.message;
-      btn.disabled = false;
-      btn.textContent = '⚡ Retry Load';
+      loadBtn.disabled = false;
+      loadBtn.textContent = '⚡ Retry Load';
     }
   };
 
-  // ── DEMO: KNOWLEDGE BASE (simple local embedding) ──
+  // ── DEMO: KB / RAG ──
+  let demoKB = [];
+  let embPipeline = null;
+
   async function getEmbedPipeline() {
     if (embPipeline) return embPipeline;
     const TJS_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.2/dist/transformers.min.js';
     const TJS = demoTJS || await import(TJS_URL);
-    embPipeline = await TJS.pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
-      dtype: 'q8',
-      device: 'wasm',
-    });
+    embPipeline = await TJS.pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', { dtype: 'q8', device: 'wasm' });
     return embPipeline;
   }
 
@@ -1248,11 +1456,10 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
     return dot/(Math.sqrt(na)*Math.sqrt(nb)+1e-8);
   }
 
-  function kwScore(query, text) {
-    const words = query.toLowerCase().split(/\W+/).filter(w=>w.length>2);
-    const t = text.toLowerCase();
-    if (!words.length) return 0;
-    return words.filter(w=>t.includes(w)).length / words.length;
+  function kwScore(q, t) {
+    const words = q.toLowerCase().split(/\W+/).filter(w=>w.length>2);
+    const tl = t.toLowerCase();
+    return words.length ? words.filter(w=>tl.includes(w)).length/words.length : 0;
   }
 
   window.handleKBUpload = async function(event) {
@@ -1260,20 +1467,16 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
     const kbStatus = document.getElementById('kb-status');
     const ragBadge = document.getElementById('rag-active-badge');
     kbStatus.textContent = 'Embedding docs…';
-
     const pipe = await getEmbedPipeline();
-
     for (const file of files) {
       const text = await file.text();
-      const chunks = chunkText(text);
-      for (const chunk of chunks) {
+      for (const chunk of chunkText(text)) {
         const out = await pipe(chunk, { pooling: 'mean', normalize: true });
         demoKB.push({ text: chunk, embedding: Array.from(out.data) });
       }
     }
-
-    kbStatus.textContent = `${demoKB.length} chunks from ${files.length} doc(s)`;
-    ragBadge.style.display = 'inline-block';
+    kbStatus.textContent = `${demoKB.length} chunks · ${files.length} doc(s)`;
+    ragBadge.style.display = 'inline-flex';
   };
 
   async function retrieveContext(query) {
@@ -1281,16 +1484,16 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
     const pipe = await getEmbedPipeline();
     const out = await pipe(query, { pooling: 'mean', normalize: true });
     const qEmb = Array.from(out.data);
-    const scored = demoKB.map(c => ({
-      ...c,
-      score: 0.7*cosine(qEmb,c.embedding) + 0.3*kwScore(query,c.text)
-    })).filter(c=>c.score>=0.15).sort((a,b)=>b.score-a.score);
+    const scored = demoKB
+      .map(c => ({ ...c, score: 0.7*cosine(qEmb,c.embedding)+0.3*kwScore(query,c.text) }))
+      .filter(c => c.score>=0.15)
+      .sort((a,b) => b.score-a.score);
     let ctx='';
-    for(const c of scored){ if(ctx.length+c.text.length>3000) break; ctx+=c.text+'\n\n'; }
+    for (const c of scored){ if(ctx.length+c.text.length>3000) break; ctx+=c.text+'\n\n'; }
     return ctx.trim()||null;
   }
 
-  // ── DEMO: SEND MESSAGE ──
+  // ── DEMO: SEND ──
   window.sendDemo = async function() {
     if (!demoReady) return;
     const inputEl  = document.getElementById('demo-input');
@@ -1303,42 +1506,35 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
 
     inputEl.value = '';
     sendBtn.disabled = true;
-    outputEl.style.color = 'var(--muted)';
+    outputEl.style.color = 'var(--on-surface-variant)';
     outputEl.textContent = '⏳ Generating…';
 
     try {
       const systemPrompt = sysEl.value.trim();
       const ragContext   = await retrieveContext(userText);
 
-      let fullUserText = userText;
+      let fullText = userText;
       if (ragContext) {
-        fullUserText = `[Relevant context from your documents]\n${ragContext}\n\n${userText}`;
+        fullText = `[Relevant context from your documents]\n${ragContext}\n\n${userText}`;
       }
 
-      const firstTurn = systemPrompt
-        ? `${systemPrompt}\n\n${fullUserText}`
-        : fullUserText;
+      const firstTurn = systemPrompt ? `${systemPrompt}\n\n${fullText}` : fullText;
 
-      const messages = [
-        { role: 'user', content: [{ type: 'text', text: firstTurn }] }
-      ];
-
+      const messages = [{ role: 'user', content: [{ type: 'text', text: firstTurn }] }];
       const inputs = await demoProcessor(
         demoProcessor.apply_chat_template(messages, { add_generation_prompt: true }),
         null, null, { add_special_tokens: false }
       );
 
       let output = '';
-      outputEl.style.color = 'var(--text)';
+      outputEl.style.color = 'var(--on-surface)';
       outputEl.textContent = '';
 
-      const Streamer = demoTJS.TextStreamer;
-      const streamer = new Streamer(demoTokenizer, {
+      const streamer = new demoTJS.TextStreamer(demoTokenizer, {
         skip_prompt: true,
         skip_special_tokens: false,
-        callback_function: (chunk) => {
+        callback_function: chunk => {
           output += chunk;
-          // Render <think>…</think> in muted style
           outputEl.innerHTML = output
             .replace(/<think>([\s\S]*?)<\/think>/g,
               '<span class="think-block">&lt;thinking…&gt;$1&lt;/thinking&gt;</span>')
@@ -1347,12 +1543,7 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
         }
       });
 
-      await demoModel.generate({
-        ...inputs,
-        max_new_tokens: 300,
-        do_sample: false,
-        streamer,
-      });
+      await demoModel.generate({ ...inputs, max_new_tokens: 300, do_sample: false, streamer });
 
     } catch (err) {
       console.error(err);

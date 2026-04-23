@@ -1059,7 +1059,7 @@ Teachers' Standards. Avoid edu-jargon."</span>
   ══════════════════════════════════ -->
   <div class="slide" id="slide-9">
     <div class="content-col">
-      <div class="eyebrow">Under the Hood — thinkhere-app (open source, Apache 2.0)</div>
+      <div class="eyebrow">Under the Hood — open source, Apache 2.0</div>
       <h2 class="headline-lg">Just <span class="text-primary">HTML + JS</span>. No backend. No cloud.</h2>
       <div class="divider"></div>
       <div class="cols-2">
@@ -1070,8 +1070,8 @@ Teachers' Standards. Avoid edu-jargon."</span>
 <span class="kw">import</span> { Gemma4ForConditionalGeneration }
   <span class="kw">from</span> <span class="str">'@huggingface/transformers'</span>;
 
-<span class="cm">// Point to CDN — or host your own weights</span>
-env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
+<span class="cm">// Point to HuggingFace — or self-host weights</span>
+env.remoteHost = <span class="str">"https://huggingface.co/"</span>;
 
 <span class="kw">const</span> model = <span class="kw">await</span> <span class="fn">Gemma4ForConditionalGeneration</span>
   .<span class="fn">from_pretrained</span>(<span class="str">"onnx-community/gemma-4-E2B-it-ONNX"</span>, {
@@ -1252,7 +1252,7 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
           <div class="card-success">
             <p class="headline-md" style="color:var(--success);">Minimum viable setup</p>
             <ol class="step-list" style="margin-top:10px;">
-              <li><span class="step-num">1</span><span>Fork <strong>thinkhere-app</strong> — open source, Apache 2.0</span></li>
+              <li><span class="step-num">1</span><span>Start from an open source HTML template — Apache 2.0, no sign-up</span></li>
               <li><span class="step-num">2</span><span>Edit the system prompt to describe your learners, tone, role</span></li>
               <li><span class="step-num">3</span><span>Push to GitHub, enable Pages from repo settings</span></li>
               <li><span class="step-num">4</span><span>Share the URL with your class — it just works</span></li>
@@ -1304,8 +1304,8 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
       <div class="cols-3" style="margin-top:8px; max-width:900px; text-align:left;">
         <div class="card" style="text-align:center;">
           <div style="font-size:1.4rem; margin-bottom:8px;">🔧</div>
-          <p class="headline-md" style="color:var(--on-surface);">thinkhere-app</p>
-          <p class="body-muted" style="font-size:12px;">Open source. Fork it. Build your version. No permission needed.</p>
+          <p class="headline-md" style="color:var(--on-surface);">Open source HTML</p>
+          <p class="body-muted" style="font-size:12px;">Fork it. Build your version. No permission needed.</p>
         </div>
         <div class="card" style="text-align:center;">
           <div style="font-size:1.4rem; margin-bottom:8px;">🎓</div>

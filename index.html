@@ -1569,9 +1569,12 @@ Never use idioms without explaining them."</span>
     el.style.color = 'var(--on-surface)';
     el.innerHTML = chatHistory.map(m => {
       const isUser = m.role === 'user';
+      const kbBadge = (!isUser && m.ragUsed)
+        ? `<span style="margin-left:6px;font-size:9px;font-weight:600;letter-spacing:0.08em;color:var(--secondary);opacity:0.8;text-transform:uppercase;">KB</span>`
+        : '';
       const label = isUser
         ? `<span style="font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:0.08em;color:var(--primary);text-transform:uppercase;">You</span>`
-        : `<span style="font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:0.08em;color:var(--secondary);text-transform:uppercase;">${document.getElementById('demo-persona-title').value||'AI'}</span>`;
+        : `<span style="font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:0.08em;color:var(--secondary);text-transform:uppercase;">${document.getElementById('demo-persona-title').value||'AI'}</span>${kbBadge}`;
       const text = m.content
         .replace(/<think>[\s\S]*?<\/think>/g, '')
         .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -1612,7 +1615,8 @@ Never use idioms without explaining them."</span>
     if (embPipeline) return embPipeline;
     const TJS_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4/dist/transformers.min.js';
     const TJS = demoTJS || await import(TJS_URL);
-    embPipeline = await TJS.pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', { dtype: 'q8', device: 'wasm' });
+    // fp32 is required for reliable cosine similarity — q8 produces near-zero scores
+    embPipeline = await TJS.pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', { dtype: 'fp32', device: 'wasm' });
     return embPipeline;
   }
 
@@ -1754,7 +1758,7 @@ Never use idioms without explaining them."</span>
       );
 
       // Add placeholder assistant turn and stream into it
-      chatHistory.push({ role: 'assistant', content: '' });
+      chatHistory.push({ role: 'assistant', content: '', ragUsed: !!ragContext });
       let output = '';
 
       const streamer = new demoTJS.TextStreamer(demoTokenizer, {

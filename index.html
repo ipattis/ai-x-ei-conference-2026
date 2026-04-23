@@ -486,13 +486,14 @@
       background: var(--surface-container-low);
       border: 1px solid var(--outline);
       border-radius: var(--r-xl);
-      overflow: hidden;
+      overflow: visible;
       box-shadow: var(--glow-primary);
     }
 
     #demo-titlebar {
       background: var(--surface-container);
       border-bottom: 1px solid var(--outline);
+      border-radius: var(--r-xl) var(--r-xl) 0 0;
       padding: 11px 18px;
       display: flex;
       align-items: center;
@@ -524,6 +525,7 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
+      border-radius: 0 0 var(--r-xl) var(--r-xl);
     }
 
     .demo-field-label {
@@ -974,7 +976,7 @@ Teachers' Standards. Avoid jargon."</span>
   <!-- ══════════════════════════════════
        09 — LIVE DEMO
   ══════════════════════════════════ -->
-  <div class="slide center" id="slide-9">
+  <div class="slide center" id="slide-9" style="overflow-y: auto; justify-content: flex-start; padding-top: 32px; padding-bottom: 32px;">
     <div class="eyebrow" style="margin-bottom:14px;">Live — running in this browser tab, no server, no cloud</div>
     <div id="demo-panel">
       <div id="demo-titlebar">

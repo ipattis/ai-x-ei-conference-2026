@@ -1347,6 +1347,8 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
   document.getElementById('btn-prev').addEventListener('click', () => goTo(current - 1));
 
   document.addEventListener('keydown', e => {
+    const tag = document.activeElement?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
     if (['ArrowRight','ArrowDown',' '].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
     if (['ArrowLeft','ArrowUp'].includes(e.key))        { e.preventDefault(); goTo(current - 1); }
   });

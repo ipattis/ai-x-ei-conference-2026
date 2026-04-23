@@ -1384,7 +1384,7 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
     status.textContent = 'Importing Transformers.js…';
 
     try {
-      const TJS_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.2/dist/transformers.min.js';
+      const TJS_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4/dist/transformers.min.js';
       demoTJS = await import(TJS_URL);
       if (demoTJS.env) demoTJS.env.allowLocalModels = false;
 
@@ -1432,7 +1432,7 @@ env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
 
   async function getEmbedPipeline() {
     if (embPipeline) return embPipeline;
-    const TJS_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.2/dist/transformers.min.js';
+    const TJS_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4/dist/transformers.min.js';
     const TJS = demoTJS || await import(TJS_URL);
     embPipeline = await TJS.pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', { dtype: 'q8', device: 'wasm' });
     return embPipeline;

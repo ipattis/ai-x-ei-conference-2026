@@ -976,8 +976,8 @@ Teachers' Standards. Avoid jargon."</span>
   <!-- ══════════════════════════════════
        09 — LIVE DEMO
   ══════════════════════════════════ -->
-  <div class="slide center" id="slide-9" style="overflow-y: auto; justify-content: flex-start; padding-top: 32px; padding-bottom: 32px;">
-    <div class="eyebrow" style="margin-bottom:14px;">Live — running in this browser tab, no server, no cloud</div>
+  <div class="slide center" id="slide-9" style="overflow-y: auto; justify-content: flex-start; padding-top: 28px; padding-bottom: 28px;">
+    <div class="eyebrow" style="margin-bottom:12px;">Live — running in this browser tab, no server, no cloud</div>
     <div id="demo-panel">
       <div id="demo-titlebar">
         <div class="titlebar-dot" style="background:#ff5f56;"></div>
@@ -988,13 +988,21 @@ Teachers' Standards. Avoid jargon."</span>
       </div>
       <div id="demo-body">
 
+        <!-- PERSONA -->
         <div>
-          <div class="demo-field-label">Who is the AI? — edit this to change its character entirely</div>
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
+            <div class="demo-field-label" style="margin:0;">Persona title</div>
+          </div>
+          <input id="demo-persona-title" type="text" value="Year 7 Reading Buddy"
+            style="width:100%; background:var(--surface-container-lowest); border:1px solid var(--outline); border-radius:var(--r-md); padding:7px 12px; color:var(--on-surface); font-family:var(--font-display); font-size:13px; font-weight:600; margin-bottom:8px;"
+            placeholder="Give this AI a name / role" />
+          <div class="demo-field-label" style="margin-bottom:5px;">Who is the AI? — edit to change its character entirely</div>
           <textarea id="demo-system-prompt" spellcheck="false">You are a friendly and encouraging reading assistant for Year 7 students. Use simple, age-appropriate language. When a student asks about a book, help them think critically rather than giving direct answers. Keep responses concise — 3–4 sentences maximum.</textarea>
         </div>
 
+        <!-- PRESETS -->
         <div class="preset-row">
-          <span class="preset-label">Try a different persona:</span>
+          <span class="preset-label">Presets:</span>
           <button class="preset-btn" onclick="setPreset('reading')">📖 Reading Buddy</button>
           <button class="preset-btn" onclick="setPreset('debate')">🎙️ Debate Coach</button>
           <button class="preset-btn" onclick="setPreset('maths')">📐 Maths Tutor</button>
@@ -1002,31 +1010,50 @@ Teachers' Standards. Avoid jargon."</span>
           <button class="preset-btn" onclick="setPreset('socratic')">🦉 Socratic</button>
         </div>
 
+        <!-- KB ROW -->
         <div class="kb-row">
-          <div class="demo-field-label" style="margin:0;">Your knowledge:</div>
-          <button class="kb-btn" onclick="document.getElementById('demo-kb-file-input').click()">+ Upload a .txt document</button>
+          <div class="demo-field-label" style="margin:0;">Knowledge base:</div>
+          <button class="kb-btn" onclick="document.getElementById('demo-kb-file-input').click()">+ Upload .txt</button>
           <input type="file" id="demo-kb-file-input" accept=".txt,.md" multiple onchange="handleKBUpload(event)" />
-          <span id="kb-status">No documents loaded</span>
-          <span id="rag-active-badge">Reading your docs</span>
+          <span id="kb-status">No docs loaded</span>
+          <span id="rag-active-badge">RAG active</span>
+          <button class="kb-btn" id="kb-view-btn" onclick="toggleKBViewer()" style="display:none;">View chunks</button>
+          <button class="kb-btn" id="kb-clear-btn" onclick="clearKB()" style="display:none; color:var(--error); border-color:rgba(248,113,113,0.3);">Clear KB</button>
         </div>
 
+        <!-- KB CHUNK VIEWER -->
+        <div id="kb-viewer" style="display:none; background:var(--surface-container-lowest); border:1px solid var(--outline); border-radius:var(--r-md); max-height:100px; overflow-y:auto; padding:10px 12px; font-family:var(--font-mono); font-size:11px; line-height:1.5; color:var(--on-surface-variant);"></div>
+
+        <!-- INPUT -->
         <div class="demo-input-row">
-          <input id="demo-input" type="text" placeholder="e.g. 'What themes appear in Of Mice and Men?'" disabled onkeydown="if(event.key==='Enter') sendDemo()" />
+          <input id="demo-input" type="text" placeholder="Ask something…" disabled onkeydown="if(event.key==='Enter') sendDemo()" />
           <button class="demo-send-btn" id="demo-send-btn" disabled onclick="sendDemo()">Send →</button>
         </div>
 
+        <!-- CONVERSATION -->
         <div>
-          <div class="demo-field-label">Response</div>
-          <div id="demo-output" style="color:var(--on-surface-variant);">Load the model below, then ask it something.</div>
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
+            <div class="demo-field-label" style="margin:0;">Conversation</div>
+            <button onclick="clearConversation()" style="margin-left:auto; background:none; border:none; color:var(--on-surface-variant); font-family:var(--font-display); font-size:10px; cursor:pointer; padding:2px 6px; border-radius:var(--r-sm); transition:color 0.15s;" onmouseover="this.style.color='var(--error)'" onmouseout="this.style.color='var(--on-surface-variant)'">Clear</button>
+            <button onclick="exportConversation()" style="background:none; border:1px solid var(--outline); color:var(--on-surface-variant); font-family:var(--font-display); font-size:10px; cursor:pointer; padding:2px 8px; border-radius:var(--r-sm); transition:color 0.15s, border-color 0.15s;" onmouseover="this.style.color='var(--secondary)'; this.style.borderColor='rgba(56,217,217,0.4)'" onmouseout="this.style.color='var(--on-surface-variant)'; this.style.borderColor='var(--outline)'">Export .txt</button>
+          </div>
+          <div id="demo-conversation" style="background:var(--surface-container-lowest); border:1px solid var(--outline); border-radius:var(--r-md); min-height:80px; max-height:220px; overflow-y:auto; padding:12px 14px; font-size:13px; line-height:1.65; color:var(--on-surface-variant);">
+            Load the model below, then start a conversation.
+          </div>
         </div>
 
+        <!-- LOAD -->
         <div class="demo-load-row">
-          <button class="demo-load-btn" id="demo-load-btn" onclick="loadDemoModel()">⚡ Load AI model in browser (~1.2 GB download, cached after first load)</button>
-          <span id="demo-load-progress"></span>
+          <button class="demo-load-btn" id="demo-load-btn" onclick="loadDemoModel()">⚡ Load Gemma 4 (~1.2 GB, cached after first load)</button>
+          <span id="demo-load-progress" style="font-family:var(--font-display); font-size:13px; font-weight:700; color:var(--primary);"></span>
         </div>
 
       </div>
     </div>
+
+    <style>
+      #demo-persona-title:focus { outline:none; border-color:rgba(244,196,48,0.4); }
+    </style>
   </div>
 
   <!-- ══════════════════════════════════
@@ -1451,16 +1478,21 @@ Never use idioms without explaining them."</span>
 
   // ── DEMO: PRESETS ──
   const PRESETS = {
-    reading:  `You are Archie, a friendly reading buddy for Year 7 students aged 11–12. Use simple, encouraging language. Never just give plot answers — ask the student what THEY think. Keep responses to 3–4 sentences.`,
-    debate:   `You are a debate coach for Sixth Form students. Always argue the opposing side of whatever position the student takes. Push back with evidence and rhetorical questions. Be challenging but fair.`,
-    maths:    `You are a patient maths tutor for GCSE students. When a student gets stuck, never give the answer — ask a guiding question that helps them figure out the next step. Use plain language, no jargon.`,
-    cpd:      `You are a professional coaching assistant for teachers. Help staff reflect on their practice by asking open questions. Ground all advice in the DfE Teachers' Standards. Avoid edu-jargon. Ask one question at a time.`,
-    socratic: `You are a Socratic tutor. You never give direct answers — only questions that help the learner think more deeply. Every response must end with a question. Be warm but intellectually rigorous.`,
+    reading:  { title: 'Year 7 Reading Buddy',    prompt: `You are Archie, a friendly reading buddy for Year 7 students aged 11–12. Use simple, encouraging language. Never just give plot answers — ask the student what THEY think. Keep responses to 3–4 sentences.` },
+    debate:   { title: 'Sixth Form Debate Coach', prompt: `You are a debate coach for Sixth Form students. Always argue the opposing side of whatever position the student takes. Push back with evidence and rhetorical questions. Be challenging but fair.` },
+    maths:    { title: 'GCSE Maths Tutor',        prompt: `You are a patient maths tutor for GCSE students. When a student gets stuck, never give the answer — ask a guiding question that helps them figure out the next step. Use plain language, no jargon.` },
+    cpd:      { title: 'CPD Coaching Partner',    prompt: `You are a professional coaching assistant for teachers. Help staff reflect on their practice by asking open questions. Ground all advice in the DfE Teachers' Standards. Avoid edu-jargon. Ask one question at a time.` },
+    socratic: { title: 'Socratic Tutor',          prompt: `You are a Socratic tutor. You never give direct answers — only questions that help the learner think more deeply. Every response must end with a question. Be warm but intellectually rigorous.` },
   };
 
   window.setPreset = function(key) {
-    const el = document.getElementById('demo-system-prompt');
-    if (el && PRESETS[key]) el.value = PRESETS[key];
+    const p = PRESETS[key];
+    if (!p) return;
+    document.getElementById('demo-system-prompt').value = p.prompt;
+    document.getElementById('demo-persona-title').value  = p.title;
+    // Reset conversation when persona changes
+    chatHistory = [];
+    renderConversation();
   };
 
   // ── DEMO: MODEL ──
@@ -1477,21 +1509,23 @@ Never use idioms without explaining them."</span>
 
     loadBtn.disabled = true;
     loadBtn.textContent = '⏳ Loading…';
-    status.textContent = 'Importing Transformers.js…';
+    status.textContent = 'Loading…';
 
     try {
       const TJS_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4/dist/transformers.min.js';
       demoTJS = await import(TJS_URL);
       if (demoTJS.env) demoTJS.env.allowLocalModels = false;
 
-      status.textContent = 'Downloading Gemma 4 (~1.2 GB, cached after first load)…';
-
+      // Track overall progress across all files
+      const fileProgress = {};
       const progressCb = p => {
-        if (p && p.progress != null) {
-          const pct = Math.round(p.progress);
-          prog.textContent = `${pct}%${p.file ? ' — ' + p.file : ''}`;
-          status.textContent = `Downloading… ${pct}%`;
-        }
+        if (!p || p.progress == null) return;
+        if (p.file) fileProgress[p.file] = p.progress;
+        // Average across all known files
+        const vals = Object.values(fileProgress);
+        const avg = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : Math.round(p.progress);
+        prog.textContent = `${avg}%`;
+        status.textContent = `Loading… ${avg}%`;
       };
 
       const modelId = 'onnx-community/gemma-4-E2B-it-ONNX';
@@ -1507,7 +1541,7 @@ Never use idioms without explaining them."</span>
       });
 
       demoReady = true;
-      status.textContent = 'Gemma 4 E2B ready';
+      status.textContent = 'Gemma 4 ready';
       prog.textContent = '';
       loadBtn.textContent = '✅ Model loaded';
       document.getElementById('demo-input').disabled = false;
@@ -1516,10 +1550,58 @@ Never use idioms without explaining them."</span>
     } catch (err) {
       console.error(err);
       status.textContent = 'Load failed — see console';
-      prog.textContent = err.message;
+      prog.textContent = '';
       loadBtn.disabled = false;
       loadBtn.textContent = '⚡ Retry Load';
     }
+  };
+
+  // ── DEMO: CONVERSATION STATE ──
+  let chatHistory = []; // [{ role: 'user'|'assistant', content: string }]
+
+  function renderConversation() {
+    const el = document.getElementById('demo-conversation');
+    if (!chatHistory.length) {
+      el.style.color = 'var(--on-surface-variant)';
+      el.innerHTML = 'Load the model below, then start a conversation.';
+      return;
+    }
+    el.style.color = 'var(--on-surface)';
+    el.innerHTML = chatHistory.map(m => {
+      const isUser = m.role === 'user';
+      const label = isUser
+        ? `<span style="font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:0.08em;color:var(--primary);text-transform:uppercase;">You</span>`
+        : `<span style="font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:0.08em;color:var(--secondary);text-transform:uppercase;">${document.getElementById('demo-persona-title').value||'AI'}</span>`;
+      const text = m.content
+        .replace(/<think>[\s\S]*?<\/think>/g, '')
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/\n/g,'<br>');
+      return `<div style="margin-bottom:10px;">${label}<div style="margin-top:3px;">${text}</div></div>`;
+    }).join('');
+    el.scrollTop = el.scrollHeight;
+  }
+
+  window.clearConversation = function() {
+    chatHistory = [];
+    renderConversation();
+  };
+
+  window.exportConversation = function() {
+    if (!chatHistory.length) return;
+    const title  = document.getElementById('demo-persona-title').value || 'AI';
+    const system = document.getElementById('demo-system-prompt').value.trim();
+    const lines  = [`Conversation export — ${title}`, `Date: ${new Date().toLocaleString()}`, ''];
+    if (system) lines.push(`[Persona]\n${system}\n`);
+    chatHistory.forEach(m => {
+      const speaker = m.role === 'user' ? 'You' : title;
+      lines.push(`${speaker}:\n${m.content.replace(/<think>[\s\S]*?<\/think>/g,'').trim()}\n`);
+    });
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `conversation-${title.toLowerCase().replace(/\s+/g,'-')}.txt`;
+    a.click();
+    URL.revokeObjectURL(a.href);
   };
 
   // ── DEMO: KB / RAG ──
@@ -1558,11 +1640,49 @@ Never use idioms without explaining them."</span>
     return words.length ? words.filter(w=>tl.includes(w)).length/words.length : 0;
   }
 
+  function updateKBUI() {
+    const kbStatus  = document.getElementById('kb-status');
+    const ragBadge  = document.getElementById('rag-active-badge');
+    const viewBtn   = document.getElementById('kb-view-btn');
+    const clearBtn  = document.getElementById('kb-clear-btn');
+    if (demoKB.length) {
+      kbStatus.textContent = `${demoKB.length} chunks loaded`;
+      ragBadge.style.display = 'inline-flex';
+      viewBtn.style.display  = 'inline-block';
+      clearBtn.style.display = 'inline-block';
+    } else {
+      kbStatus.textContent = 'No docs loaded';
+      ragBadge.style.display = 'none';
+      viewBtn.style.display  = 'none';
+      clearBtn.style.display = 'none';
+      document.getElementById('kb-viewer').style.display = 'none';
+    }
+  }
+
+  window.clearKB = function() {
+    demoKB = [];
+    document.getElementById('demo-kb-file-input').value = '';
+    updateKBUI();
+  };
+
+  window.toggleKBViewer = function() {
+    const viewer = document.getElementById('kb-viewer');
+    if (viewer.style.display === 'none') {
+      viewer.innerHTML = demoKB.map((c,i) =>
+        `<div style="margin-bottom:6px; padding-bottom:6px; border-bottom:1px solid var(--outline);"><span style="color:var(--primary);">#${i+1}</span> ${c.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`
+      ).join('');
+      viewer.style.display = 'block';
+      document.getElementById('kb-view-btn').textContent = 'Hide chunks';
+    } else {
+      viewer.style.display = 'none';
+      document.getElementById('kb-view-btn').textContent = 'View chunks';
+    }
+  };
+
   window.handleKBUpload = async function(event) {
     const files = Array.from(event.target.files);
-    const kbStatus = document.getElementById('kb-status');
-    const ragBadge = document.getElementById('rag-active-badge');
-    kbStatus.textContent = 'Embedding docs…';
+    if (!files.length) return;
+    document.getElementById('kb-status').textContent = 'Embedding…';
     const pipe = await getEmbedPipeline();
     for (const file of files) {
       const text = await file.text();
@@ -1571,8 +1691,7 @@ Never use idioms without explaining them."</span>
         demoKB.push({ text: chunk, embedding: Array.from(out.data) });
       }
     }
-    kbStatus.textContent = `${demoKB.length} chunks · ${files.length} doc(s)`;
-    ragBadge.style.display = 'inline-flex';
+    updateKBUI();
   };
 
   async function retrieveContext(query) {
@@ -1589,63 +1708,74 @@ Never use idioms without explaining them."</span>
     return ctx.trim()||null;
   }
 
-  // ── DEMO: SEND ──
+  // ── DEMO: SEND (multi-turn) ──
   window.sendDemo = async function() {
     if (!demoReady) return;
-    const inputEl  = document.getElementById('demo-input');
-    const outputEl = document.getElementById('demo-output');
-    const sendBtn  = document.getElementById('demo-send-btn');
-    const sysEl    = document.getElementById('demo-system-prompt');
+    const inputEl = document.getElementById('demo-input');
+    const sendBtn = document.getElementById('demo-send-btn');
+    const sysEl   = document.getElementById('demo-system-prompt');
 
     const userText = inputEl.value.trim();
     if (!userText) return;
 
     inputEl.value = '';
     sendBtn.disabled = true;
-    outputEl.style.color = 'var(--on-surface-variant)';
-    outputEl.textContent = '⏳ Generating…';
+
+    // Append RAG context to user message if available
+    const ragContext = await retrieveContext(userText);
+    const userContent = ragContext
+      ? `[Relevant context from your documents]\n${ragContext}\n\n${userText}`
+      : userText;
+
+    // Add user turn to history (store raw text for export, RAG-augmented for model)
+    chatHistory.push({ role: 'user', content: userText });
+    renderConversation();
 
     try {
       const systemPrompt = sysEl.value.trim();
-      const ragContext   = await retrieveContext(userText);
 
-      let fullText = userText;
-      if (ragContext) {
-        fullText = `[Relevant context from your documents]\n${ragContext}\n\n${userText}`;
-      }
+      // Build full message list for the model — system injected into first user turn
+      const modelMessages = chatHistory.map((m, i) => {
+        if (m.role === 'user') {
+          // For the last user turn, use RAG-augmented content
+          const msgContent = i === chatHistory.length - 1 ? userContent : m.content;
+          // Inject system prompt into the very first user message
+          const text = (i === 0 && systemPrompt)
+            ? `${systemPrompt}\n\n${msgContent}`
+            : msgContent;
+          return { role: 'user', content: [{ type: 'text', text }] };
+        }
+        return { role: 'assistant', content: [{ type: 'text', text: m.content }] };
+      });
 
-      const firstTurn = systemPrompt ? `${systemPrompt}\n\n${fullText}` : fullText;
-
-      const messages = [{ role: 'user', content: [{ type: 'text', text: firstTurn }] }];
       const inputs = await demoProcessor(
-        demoProcessor.apply_chat_template(messages, { add_generation_prompt: true }),
+        demoProcessor.apply_chat_template(modelMessages, { add_generation_prompt: true }),
         null, null, { add_special_tokens: false }
       );
 
+      // Add placeholder assistant turn and stream into it
+      chatHistory.push({ role: 'assistant', content: '' });
       let output = '';
-      outputEl.style.color = 'var(--on-surface)';
-      outputEl.textContent = '';
 
       const streamer = new demoTJS.TextStreamer(demoTokenizer, {
         skip_prompt: true,
         skip_special_tokens: false,
         callback_function: chunk => {
           output += chunk;
-          outputEl.innerHTML = output
-            .replace(/<think>([\s\S]*?)<\/think>/g,
-              '<span class="think-block">&lt;thinking…&gt;$1&lt;/thinking&gt;</span>')
-            .replace(/\n/g, '<br>');
-          outputEl.scrollTop = outputEl.scrollHeight;
+          chatHistory[chatHistory.length - 1].content = output;
+          renderConversation();
         }
       });
 
-      await demoModel.generate({ ...inputs, max_new_tokens: 300, do_sample: false, streamer });
+      await demoModel.generate({ ...inputs, max_new_tokens: 400, do_sample: false, streamer });
 
     } catch (err) {
       console.error(err);
-      outputEl.textContent = 'Error: ' + err.message;
+      chatHistory.push({ role: 'assistant', content: `Error: ${err.message}` });
+      renderConversation();
     } finally {
       sendBtn.disabled = false;
+      inputEl.focus();
     }
   };
 </script>

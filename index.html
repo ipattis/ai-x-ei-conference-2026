@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reclaiming the Narrative — AI x EI Conference 2026</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface2: #1a1a28;
+      --border: #2a2a3d;
+      --accent: #7c6aff;
+      --accent2: #3ecfcf;
+      --accent3: #ff6a6a;
+      --text: #e8e8f0;
+      --muted: #7a7a96;
+      --green: #4ade80;
+      --yellow: #fbbf24;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* ── SLIDES ── */
+    .deck { width: 100%; height: 100vh; position: relative; }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 48px 64px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .slide.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    /* ── PROGRESS ── */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 0.3s ease;
+      z-index: 100;
+    }
+
+    #slide-counter {
+      position: fixed;
+      bottom: 20px;
+      right: 28px;
+      font-size: 12px;
+      color: var(--muted);
+      z-index: 100;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── NAV ── */
+    .nav-btn {
+      position: fixed;
+      bottom: 20px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 18px;
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 100;
+      transition: background 0.2s;
+    }
+    .nav-btn:hover { background: var(--border); }
+    #btn-prev { left: 28px; }
+    #btn-next { left: 90px; }
+
+    /* ── TYPOGRAPHY ── */
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1px;
+    }
+    h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+    h3 {
+      font-size: clamp(1.1rem, 2vw, 1.5rem);
+      font-weight: 600;
+      color: var(--accent2);
+      margin-bottom: 8px;
+    }
+    p, li {
+      font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+      line-height: 1.7;
+      color: var(--text);
+    }
+    .muted { color: var(--muted); }
+    .accent { color: var(--accent); }
+    .accent2 { color: var(--accent2); }
+    .accent3 { color: var(--accent3); }
+    .green { color: var(--green); }
+    .yellow { color: var(--yellow); }
+
+    strong { color: #fff; font-weight: 700; }
+
+    /* ── LAYOUT HELPERS ── */
+    .cols-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      width: 100%;
+      max-width: 1100px;
+    }
+    .cols-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+      width: 100%;
+      max-width: 1100px;
+    }
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 900px;
+    }
+    .center { text-align: center; }
+    .content-col {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 960px;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .card-accent {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, #1a1a30, #12121a);
+    }
+    .card-green {
+      border-color: var(--green);
+      background: linear-gradient(135deg, #0d1f14, #12121a);
+    }
+    .card-yellow {
+      border-color: var(--yellow);
+      background: linear-gradient(135deg, #1f1a0d, #12121a);
+    }
+    .card-red {
+      border-color: var(--accent3);
+      background: linear-gradient(135deg, #1f0d0d, #12121a);
+    }
+
+    /* ── CHIP / BADGE ── */
+    .chip {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .chip-purple { background: #2a1f5e; color: var(--accent); border: 1px solid var(--accent); }
+    .chip-teal   { background: #0d2f2f; color: var(--accent2); border: 1px solid var(--accent2); }
+    .chip-red    { background: #2f0d0d; color: var(--accent3); border: 1px solid var(--accent3); }
+    .chip-green  { background: #0d1f14; color: var(--green); border: 1px solid var(--green); }
+
+    /* ── BIG STAT ── */
+    .stat-block {
+      text-align: center;
+      padding: 24px;
+    }
+    .stat-num {
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ── CODE BLOCK ── */
+    pre, code {
+      font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    }
+    .code-block {
+      background: #0d0d14;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      width: 100%;
+    }
+    .code-block .kw { color: #c792ea; }
+    .code-block .str { color: #c3e88d; }
+    .code-block .cm { color: #546e7a; }
+    .code-block .fn { color: #82aaff; }
+    .code-block .num { color: #f78c6c; }
+
+    /* ── STEP LIST ── */
+    .step-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+    .step-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .step-num {
+      min-width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ── QUOTE ── */
+    .quote-block {
+      border-left: 3px solid var(--accent);
+      padding-left: 20px;
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      font-style: italic;
+      color: var(--text);
+      max-width: 800px;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px;
+      margin: 12px 0;
+    }
+
+    /* ── PILL TAGS ── */
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    /* ── DEMO PANEL (live) ── */
+    #demo-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(124, 106, 255, 0.12);
+    }
+    #demo-header {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    #demo-header .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    #demo-model-badge {
+      margin-left: auto;
+      font-size: 11px;
+      color: var(--accent2);
+      background: #0d2f2f;
+      border: 1px solid var(--accent2);
+      padding: 2px 10px;
+      border-radius: 99px;
+    }
+    #demo-status {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    #demo-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .demo-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    #demo-system-prompt {
+      width: 100%;
+      background: #0d0d14;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: 'Fira Code', monospace;
+      resize: vertical;
+      min-height: 70px;
+      transition: border-color 0.2s;
+    }
+    #demo-system-prompt:focus { outline: none; border-color: var(--accent); }
+
+    .demo-row {
+      display: flex;
+      gap: 8px;
+    }
+    #demo-input {
+      flex: 1;
+      background: #0d0d14;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+    #demo-input:focus { outline: none; border-color: var(--accent); }
+    #demo-input::placeholder { color: var(--muted); }
+
+    #demo-send-btn {
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    #demo-send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    #demo-kb-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    #demo-kb-btn:hover { background: var(--border); }
+
+    #demo-load-btn {
+      background: transparent;
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      padding: 8px 16px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #demo-load-btn:hover { background: #2a1f5e; }
+    #demo-load-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    #demo-output {
+      background: #0d0d14;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      min-height: 80px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .rag-indicator {
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 99px;
+      background: #0d1f14;
+      color: var(--green);
+      border: 1px solid var(--green);
+    }
+
+    #demo-kb-file { display: none; }
+
+    /* thinking tokens */
+    .think-block {
+      color: #546e7a;
+      font-style: italic;
+      font-size: 0.9em;
+    }
+
+    /* ── SLIDE 1: TITLE ── */
+    #slide-1 {
+      background:
+        radial-gradient(ellipse 80% 60% at 60% 40%, rgba(124,106,255,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 20% 80%, rgba(62,207,207,0.08) 0%, transparent 60%),
+        var(--bg);
+    }
+    #slide-1 .tag-row { justify-content: flex-start; }
+
+    /* ── SLIDE 2: narrative ── */
+    #slide-2 {
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255,106,106,0.07) 0%, transparent 70%), var(--bg);
+    }
+
+    /* ── FINAL ── */
+    #slide-final {
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 50%, rgba(124,106,255,0.15) 0%, transparent 70%),
+        var(--bg);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .cols-2, .cols-3 { grid-template-columns: 1fr; }
+      .slide { padding: 32px 24px; }
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .pulse { animation: pulse-dot 1.4s ease infinite; }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .spin { animation: spin 1s linear infinite; display: inline-block; }
+
+    /* scroll indicator on demo */
+    .scroll-hint {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: right;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button class="nav-btn" id="btn-prev">←</button>
+<button class="nav-btn" id="btn-next">→</button>
+<span id="slide-counter"></span>
+
+<div class="deck" id="deck">
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ══════════════════════════════════════════════ -->
+  <div class="slide active" id="slide-1">
+    <div class="content-col">
+      <div class="eyebrow">AI × EI Conference 2026 — Wishford Education</div>
+      <h1>Reclaiming<br><span class="accent">the Narrative</span></h1>
+      <div class="divider"></div>
+      <p style="max-width:640px; font-size:1.2rem; color: var(--muted);">
+        Why <strong>Big Tech doesn't have to write the rules</strong> of AI in education —
+        and how you can build powerful, private, free AI experiences for your students and teachers today.
+      </p>
+      <div class="tag-row">
+        <span class="chip chip-purple">Edge AI</span>
+        <span class="chip chip-teal">Gemma 4</span>
+        <span class="chip chip-teal">Runs in a Browser</span>
+        <span class="chip chip-green">No Data Leaves Your Device</span>
+        <span class="chip chip-red">No Subscription Required</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 2 — THE PROBLEM: WHO OWNS THE NARRATIVE?
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-2">
+    <div class="content-col">
+      <div class="eyebrow">The Problem</div>
+      <h2>Who's been <span class="accent3">writing the script</span>?</h2>
+      <div class="divider"></div>
+      <div class="cols-2" style="max-width:960px;">
+        <div class="card card-red">
+          <h3 style="color:var(--accent3);">Big Tech Playbook</h3>
+          <ul class="step-list" style="margin-top:8px;">
+            <li><span>🔒</span><span>Data harvested at scale — your students' prompts become training data</span></li>
+            <li><span>💳</span><span>Premium features gated behind per-seat subscriptions</span></li>
+            <li><span>📋</span><span>Rigid, one-size-fits-all tools that don't fit your context</span></li>
+            <li><span>🌐</span><span>Always-on internet dependency — no connectivity, no AI</span></li>
+            <li><span>🔧</span><span>You consume the product. You don't shape it.</span></li>
+          </ul>
+        </div>
+        <div class="card card-green">
+          <h3 style="color:var(--green);">What Education Actually Needs</h3>
+          <ul class="step-list" style="margin-top:8px;">
+            <li><span>🧠</span><span>AI that understands <em>your</em> curriculum, context, values</span></li>
+            <li><span>🔐</span><span>Student data that never leaves your school</span></li>
+            <li><span>⚡</span><span>Works offline, in any classroom, on a laptop</span></li>
+            <li><span>🎯</span><span>Purpose-built for specific learners and teachers</span></li>
+            <li><span>🆓</span><span>No per-student cost at point of use</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 3 — THE SHIFT: EDGE AI IS HERE
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <div class="content-col center" style="align-items:center;">
+      <div class="eyebrow">The Shift</div>
+      <h2>The model has <span class="accent">left the data centre</span></h2>
+      <div class="divider" style="margin:12px auto;"></div>
+      <div class="cols-3" style="max-width:1000px; margin-top: 8px;">
+        <div class="card stat-block">
+          <div class="stat-num accent">1.2<span style="font-size:0.5em;vertical-align:top;margin-top:0.3em;display:inline-block;">GB</span></div>
+          <div class="stat-label">Gemma 4 E2B — full multimodal reasoning model, runs in a browser tab</div>
+        </div>
+        <div class="card stat-block">
+          <div class="stat-num accent2">0</div>
+          <div class="stat-label">Bytes sent to any server — pure client-side inference via WebGPU</div>
+        </div>
+        <div class="card stat-block">
+          <div class="stat-num green">Free</div>
+          <div class="stat-label">No API key, no account, no subscription needed to run the model</div>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:16px; max-width:700px;">
+        Google's <strong>Gemma 4</strong> family, open-weight and Apache 2.0 licensed, runs entirely in the browser via
+        <strong>Transformers.js + WebGPU</strong>. Text, images, thinking mode — all local.
+        The same capability that cost thousands per month two years ago now runs on a school laptop.
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 4 — WHAT IS "EDGE AI"?
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-4">
+    <div class="content-col">
+      <div class="eyebrow">Context</div>
+      <h2>What does <span class="accent">"edge AI"</span> actually mean?</h2>
+      <div class="divider"></div>
+      <div class="cols-2">
+        <div class="stack">
+          <div class="card">
+            <h3>Cloud AI (what you're used to)</h3>
+            <p>Your prompt travels to a data centre (OpenAI, Google, Microsoft). A huge model runs on GPU clusters. A response comes back. <strong>Your data touched someone else's system.</strong></p>
+          </div>
+          <div class="card card-accent">
+            <h3>Edge AI (what's now possible)</h3>
+            <p>The model <em>is</em> the browser tab. Your prompt runs on your own hardware — CPU or GPU — using WebAssembly or WebGPU. <strong>Nothing leaves the device. Ever.</strong></p>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card">
+            <h3>Why now?</h3>
+            <ul class="step-list">
+              <li><span class="step-num">1</span><span>Quantisation: 4-bit models are 4–8× smaller with minimal quality loss</span></li>
+              <li><span class="step-num">2</span><span>WebGPU: browser-native GPU access, no install required</span></li>
+              <li><span class="step-num">3</span><span>Open weights: Gemma, Qwen, Llama, Phi — free to download and run</span></li>
+              <li><span class="step-num">4</span><span>Transformers.js: HuggingFace's library brings the full pipeline to JS</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 5 — THE THREE PILLARS
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-5">
+    <div class="content-col center" style="align-items:center;">
+      <div class="eyebrow">How It Works</div>
+      <h2>Three pillars of an <span class="accent">educator-owned</span> AI experience</h2>
+      <div class="divider" style="margin: 12px auto;"></div>
+      <div class="cols-3" style="max-width: 1050px;">
+        <div class="card card-accent">
+          <div style="font-size:2rem; margin-bottom:10px;">🧬</div>
+          <h3>1. The Model</h3>
+          <p>Open-weight, quantised, runs in the browser. No API key. No internet required after first load. Cache once, use offline forever.</p>
+          <div class="tag-row" style="margin-top:12px;">
+            <span class="chip chip-teal">Gemma 4</span>
+            <span class="chip chip-purple">WebGPU</span>
+          </div>
+        </div>
+        <div class="card card-accent">
+          <div style="font-size:2rem; margin-bottom:10px;">🎭</div>
+          <h3>2. System Prompting</h3>
+          <p>You define who the AI is. A Year 8 debate coach. A SEND reading companion. A teacher's lesson planner. One prompt, entirely different experience.</p>
+          <div class="tag-row" style="margin-top:12px;">
+            <span class="chip chip-purple">Persona</span>
+            <span class="chip chip-purple">Tone</span>
+            <span class="chip chip-purple">Constraints</span>
+          </div>
+        </div>
+        <div class="card card-accent">
+          <div style="font-size:2rem; margin-bottom:10px;">📚</div>
+          <h3>3. Knowledge Base (RAG)</h3>
+          <p>Upload your curriculum docs, marking schemes, SEN profiles. The AI answers from <em>your</em> knowledge, not the public internet. Semantically grounded, locally stored.</p>
+          <div class="tag-row" style="margin-top:12px;">
+            <span class="chip chip-teal">Your Docs</span>
+            <span class="chip chip-teal">Local Vectors</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 6 — SYSTEM PROMPTING DEEP DIVE
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-6">
+    <div class="content-col">
+      <div class="eyebrow">Pillar 2 — System Prompting</div>
+      <h2>You define the <span class="accent">AI's identity</span></h2>
+      <div class="divider"></div>
+      <div class="cols-2">
+        <div class="stack">
+          <p>A system prompt is the instruction that runs <em>before</em> any student interaction. It shapes everything: tone, vocabulary level, what topics to avoid, what role to play.</p>
+          <div class="card">
+            <h3>Example: Year 6 Reading Companion</h3>
+            <div class="code-block">
+<span class="cm">// System prompt for a primary reading assistant</span>
+<span class="str">"You are Archie, a friendly reading buddy
+for Year 6 pupils aged 10–11.
+Always use simple vocabulary.
+Never give away plot answers — instead
+ask the pupil what THEY think happens next.
+If a pupil seems stuck, offer encouragement
+first. Keep responses under 4 sentences."</span>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Example: Teacher CPD Planner</h3>
+            <div class="code-block">
+<span class="str">"You are a coaching assistant for teachers
+preparing CPD sessions. Ask clarifying
+questions before making suggestions.
+Ground all advice in the DfE Teachers'
+Standards. Avoid educational jargon."</span>
+            </div>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card card-accent">
+            <h3>What a system prompt controls</h3>
+            <ul class="step-list">
+              <li><span>🎭</span><span><strong>Persona</strong> — name, role, personality</span></li>
+              <li><span>📏</span><span><strong>Reading level</strong> — GCSE, KS2, adult</span></li>
+              <li><span>🚫</span><span><strong>Topic boundaries</strong> — what to refuse or redirect</span></li>
+              <li><span>💬</span><span><strong>Response style</strong> — Socratic, direct, encouraging</span></li>
+              <li><span>🌍</span><span><strong>Values</strong> — your school's ethos, safeguarding tone</span></li>
+              <li><span>📝</span><span><strong>Format</strong> — bullet points, short answers, markdown</span></li>
+            </ul>
+          </div>
+          <p class="muted" style="font-size:0.9rem;">No developer needed. A teacher who knows their learners writes better system prompts than any product manager at a tech company ever will.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 7 — RAG DEEP DIVE
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-7">
+    <div class="content-col">
+      <div class="eyebrow">Pillar 3 — Knowledge Base / RAG</div>
+      <h2>The AI knows <span class="accent2">what you teach it</span></h2>
+      <div class="divider"></div>
+      <div class="cols-2">
+        <div class="stack">
+          <p>RAG — <strong>Retrieval Augmented Generation</strong> — means the AI searches your uploaded documents before answering, then grounds its response in what it finds.</p>
+          <div class="card card-green">
+            <h3>How it works (locally, in the browser)</h3>
+            <ol class="step-list">
+              <li><span class="step-num">1</span><span>You upload a .txt document — curriculum spec, policy, marking guide</span></li>
+              <li><span class="step-num">2</span><span>It's split into chunks (~500 chars each) and converted to dense vector embeddings</span></li>
+              <li><span class="step-num">3</span><span>Stored in IndexedDB — stays on the device, survives page reloads</span></li>
+              <li><span class="step-num">4</span><span>When a pupil asks something, the most relevant chunks are retrieved</span></li>
+              <li><span class="step-num">5</span><span>Those chunks are injected into the model's context before it replies</span></li>
+            </ol>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card">
+            <h3>What to upload</h3>
+            <div class="tag-row">
+              <span class="chip chip-teal">AQA Spec</span>
+              <span class="chip chip-teal">School Marking Policy</span>
+              <span class="chip chip-teal">Reading List</span>
+              <span class="chip chip-purple">SEN Guidelines</span>
+              <span class="chip chip-purple">Lesson Plans</span>
+              <span class="chip chip-green">School Handbook</span>
+              <span class="chip chip-green">CPD Notes</span>
+              <span class="chip chip-red">Safeguarding Policy</span>
+            </div>
+          </div>
+          <div class="card card-yellow">
+            <h3 style="color:var(--yellow);">Hybrid scoring — smarter retrieval</h3>
+            <p>Combines <strong>semantic similarity</strong> (meaning) with <strong>keyword matching</strong> (exact terms) — 70/30 blend — so "What does the spec say about quadratics?" finds the right chunk even if it doesn't use the word "spec".</p>
+          </div>
+          <p class="muted" style="font-size:0.9rem;">All vectors stored in the browser's IndexedDB. No cloud. No third party. No data protection headache.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 8 — LIVE DEMO
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-8">
+    <div class="eyebrow" style="margin-bottom:12px;">Live Demo — Runs Entirely in This Browser Tab</div>
+    <div id="demo-panel">
+      <div id="demo-header">
+        <div class="dot" style="background:#ff5f56;"></div>
+        <div class="dot" style="background:#ffbd2e;"></div>
+        <div class="dot" style="background:#27c93f;"></div>
+        <span id="demo-status" style="margin-left:4px;">Model not loaded</span>
+        <span id="demo-model-badge">Gemma 4 E2B · WebGPU</span>
+      </div>
+      <div id="demo-body">
+        <!-- System prompt -->
+        <div>
+          <div class="demo-label">System Prompt — define who this AI is</div>
+          <textarea id="demo-system-prompt" spellcheck="false">You are a friendly and encouraging reading assistant for Year 7 students. Use simple, age-appropriate language. When a student asks about a book, help them think critically rather than giving direct answers. Keep responses concise — 3–4 sentences maximum.</textarea>
+        </div>
+
+        <!-- Preset buttons -->
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          <span style="font-size:11px; color:var(--muted); align-self:center;">Presets:</span>
+          <button class="demo-preset-btn" onclick="setPreset('reading')">📖 Reading Buddy</button>
+          <button class="demo-preset-btn" onclick="setPreset('debate')">🎙️ Debate Coach</button>
+          <button class="demo-preset-btn" onclick="setPreset('maths')">📐 Maths Tutor</button>
+          <button class="demo-preset-btn" onclick="setPreset('cpd')">🧑‍🏫 CPD Coach</button>
+          <button class="demo-preset-btn" onclick="setPreset('socratic')">🦉 Socratic</button>
+        </div>
+
+        <!-- KB row -->
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <div class="demo-label" style="margin:0;">Knowledge Base:</div>
+          <button id="demo-kb-btn" onclick="document.getElementById('demo-kb-file').click()">+ Upload .txt doc</button>
+          <input type="file" id="demo-kb-file" accept=".txt,.md" multiple onchange="handleKBUpload(event)" />
+          <span id="kb-status" style="font-size:12px; color:var(--muted);">No docs loaded</span>
+          <span id="rag-active-badge" class="rag-indicator" style="display:none;">RAG active</span>
+        </div>
+
+        <!-- Chat output -->
+        <div>
+          <div class="demo-label">Response</div>
+          <div id="demo-output" class="muted">Load the model below, then type a message to see your AI persona in action.</div>
+          <div class="scroll-hint">scroll if needed ↕</div>
+        </div>
+
+        <!-- Input row -->
+        <div class="demo-row">
+          <input id="demo-input" type="text" placeholder="Ask something… e.g. 'What themes are in Of Mice and Men?'" disabled
+                 onkeydown="if(event.key==='Enter') sendDemo()" />
+          <button id="demo-kb-btn" onclick="document.getElementById('demo-kb-file').click()" style="display:none;"></button>
+          <button id="demo-send-btn" disabled onclick="sendDemo()">Send</button>
+        </div>
+
+        <!-- Load button -->
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <button id="demo-load-btn" onclick="loadDemoModel()">⚡ Load Gemma 4 in Browser (~1.2 GB, cached after first load)</button>
+          <span id="demo-load-progress" style="font-size:12px; color:var(--muted);"></span>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .demo-preset-btn {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 4px 12px;
+        color: var(--text);
+        font-size: 12px;
+        cursor: pointer;
+        transition: background 0.2s, border-color 0.2s;
+      }
+      .demo-preset-btn:hover { background: var(--border); border-color: var(--accent); }
+    </style>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 9 — THE CODE (HOW IT'S BUILT)
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-9">
+    <div class="content-col">
+      <div class="eyebrow">Under the Hood — thinkhere-app (open source)</div>
+      <h2>Just <span class="accent">HTML + JS</span>. No backend. No cloud.</h2>
+      <div class="divider"></div>
+      <div class="cols-2">
+        <div class="stack">
+          <div class="card">
+            <h3>Loading Gemma 4 in a browser</h3>
+            <div class="code-block">
+<span class="kw">import</span> { pipeline } <span class="kw">from</span> <span class="str">'@huggingface/transformers'</span>;
+
+<span class="cm">// Point to public model CDN — or your own</span>
+env.remoteHost = <span class="str">"https://cdn.thinkhere.ai/"</span>;
+
+<span class="cm">// Load quantised model (4-bit = ~1.2GB)</span>
+<span class="kw">const</span> model = <span class="kw">await</span> <span class="fn">Gemma4ForConditionalGeneration</span>
+  .from_pretrained(<span class="str">"onnx-community/gemma-4-E2B-it-ONNX"</span>, {
+    dtype: <span class="str">"q4f16"</span>,
+    device: <span class="str">"webgpu"</span>,  <span class="cm">// GPU in the browser</span>
+  });
+            </div>
+          </div>
+          <div class="card">
+            <h3>Injecting the system prompt</h3>
+            <div class="code-block">
+<span class="kw">const</span> messages = [
+  { role: <span class="str">"user"</span>, content: [{
+    type: <span class="str">"text"</span>,
+    text: <span class="cm">/* system prompt */</span> + <span class="str">"\n\n"</span> + userMessage
+  }]}
+];
+<span class="cm">// Gemma prepends system to first user turn</span>
+<span class="kw">const</span> prompt = processor.<span class="fn">apply_chat_template</span>(
+  messages, { add_generation_prompt: <span class="kw">true</span> }
+);
+            </div>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card">
+            <h3>RAG: retrieve relevant chunks</h3>
+            <div class="code-block">
+<span class="cm">// Hybrid: 70% semantic + 30% keyword</span>
+<span class="kw">const</span> scored = allChunks.<span class="fn">map</span>(chunk => {
+  <span class="kw">const</span> semantic = <span class="fn">cosineSimilarity</span>(
+    queryEmbedding, chunk.embedding
+  );
+  <span class="kw">const</span> keyword  = <span class="fn">keywordScore</span>(query, chunk.text);
+  <span class="kw">return</span> { ...chunk,
+    score: <span class="num">0.7</span> * semantic + <span class="num">0.3</span> * keyword };
+});
+
+<span class="kw">const</span> context = scored
+  .<span class="fn">filter</span>(c => c.score >= <span class="num">0.15</span>)
+  .<span class="fn">sort</span>((a,b) => b.score - a.score)
+  .<span class="fn">slice</span>(<span class="num">0</span>, <span class="num">3000</span> <span class="cm">/* chars */</span>);
+            </div>
+          </div>
+          <div class="card card-accent">
+            <h3>Full pipeline cost</h3>
+            <ul class="step-list">
+              <li><span>💰</span><span>Model weights: <strong>free</strong> (open weights)</span></li>
+              <li><span>🖥️</span><span>Inference: <strong>free</strong> (your device's GPU)</span></li>
+              <li><span>☁️</span><span>Hosting: <strong>GitHub Pages</strong> (free)</span></li>
+              <li><span>🔑</span><span>API key: <strong>none required</strong></span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 10 — USE CASES
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-10">
+    <div class="content-col center" style="align-items:center;">
+      <div class="eyebrow">Real Scenarios</div>
+      <h2>What could <em>you</em> build <span class="accent">this term</span>?</h2>
+      <div class="divider" style="margin:12px auto;"></div>
+      <div class="cols-3" style="max-width:1050px;">
+        <div class="card">
+          <div style="font-size:1.8rem; margin-bottom:8px;">📖</div>
+          <h3>GCSE English tutor</h3>
+          <p>Upload the AQA spec + a set text extract. Students ask questions. AI answers only from the spec. No hallucination about texts it hasn't seen.</p>
+        </div>
+        <div class="card">
+          <div style="font-size:1.8rem; margin-bottom:8px;">🤝</div>
+          <h3>SEND support tool</h3>
+          <p>System prompt: reads at Flesch–Kincaid Grade 3. Upload EHCP summary. Personalised responses that match the pupil's documented needs.</p>
+        </div>
+        <div class="card">
+          <div style="font-size:1.8rem; margin-bottom:8px;">🧑‍🏫</div>
+          <h3>Teacher CPD assistant</h3>
+          <p>Upload your school's appraisal policy + Teachers' Standards. Staff can ask about their targets in natural language. Fully private.</p>
+        </div>
+        <div class="card">
+          <div style="font-size:1.8rem; margin-bottom:8px;">🎙️</div>
+          <h3>Debate & oracy coach</h3>
+          <p>AI argues the other side. Upload debate motion + argument frameworks. Develops critical thinking without internet access.</p>
+        </div>
+        <div class="card">
+          <div style="font-size:1.8rem; margin-bottom:8px;">🌍</div>
+          <h3>EAL language buddy</h3>
+          <p>System prompt in English and L1. Vocabulary scaffolding. Upload a glossary of subject-specific terms from your scheme of work.</p>
+        </div>
+        <div class="card">
+          <div style="font-size:1.8rem; margin-bottom:8px;">📊</div>
+          <h3>Data & assessment tool</h3>
+          <p>Upload anonymised tracking data. Ask "which pupils are behind on SPaG?" Gets answers from your own data, privately, instantly.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 11 — DATA & SAFEGUARDING
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-11">
+    <div class="content-col">
+      <div class="eyebrow">Safeguarding & Data Protection</div>
+      <h2>What happens to <span class="accent2">student data</span>?</h2>
+      <div class="divider"></div>
+      <div class="cols-2">
+        <div class="card card-green">
+          <h3 style="color:var(--green);">With this approach</h3>
+          <ul class="step-list" style="margin-top:8px;">
+            <li><span>✅</span><span>All inference happens on the device — zero network requests</span></li>
+            <li><span>✅</span><span>Conversation history stored in browser's IndexedDB — local only</span></li>
+            <li><span>✅</span><span>Knowledge base docs stored locally as embeddings</span></li>
+            <li><span>✅</span><span>No account required — no identity linkage</span></li>
+            <li><span>✅</span><span>GDPR friendly by design — no processor agreement needed</span></li>
+            <li><span>✅</span><span>Works on an air-gapped school network</span></li>
+          </ul>
+        </div>
+        <div class="stack">
+          <div class="card card-red">
+            <h3 style="color:var(--accent3);">What Big Tech tools require</h3>
+            <ul class="step-list">
+              <li><span>⚠️</span><span>Student data processed on third-party servers</span></li>
+              <li><span>⚠️</span><span>Data retention and training policies vary — and change</span></li>
+              <li><span>⚠️</span><span>US-based cloud = Schrems II / international transfer risk</span></li>
+              <li><span>⚠️</span><span>Age-verification obligations for under-13s</span></li>
+              <li><span>⚠️</span><span>DPA / data processor agreement required</span></li>
+            </ul>
+          </div>
+          <div class="quote-block">
+            "The most compliant AI tool is one where the data never leaves the building."
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 12 — THE BROADER POINT
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-12">
+    <div class="content-col center" style="align-items:center;">
+      <div class="eyebrow">The Bigger Picture</div>
+      <h2>This isn't about the <span class="accent3">tech</span>.<br>It's about <span class="accent">agency</span>.</h2>
+      <div class="divider" style="margin:12px auto;"></div>
+      <div class="cols-2" style="max-width:960px; margin-top:8px;">
+        <div class="card">
+          <h3>The EdTech consumption trap</h3>
+          <p>Every platform you pay for shapes what's possible in your classroom. The vendor decides the features. The vendor decides the data policy. The vendor decides when to sunset it.</p>
+          <p style="margin-top:12px;" class="muted">Schools have been consumers of technology. This is a moment to become <strong>makers</strong> of it.</p>
+        </div>
+        <div class="card card-accent">
+          <h3>What reclaiming the narrative looks like</h3>
+          <ul class="step-list" style="margin-top:8px;">
+            <li><span>🌱</span><span><strong>Teacher agency</strong> — you write the system prompt, not a PM in San Francisco</span></li>
+            <li><span>🔍</span><span><strong>Curriculum grounding</strong> — AI knows what you teach, not what's trending</span></li>
+            <li><span>🏫</span><span><strong>School ownership</strong> — the tool lives on your device, follows your values</span></li>
+            <li><span>⚖️</span><span><strong>No gatekeeping</strong> — every school, however funded, can access this</span></li>
+          </ul>
+        </div>
+      </div>
+      <p style="max-width:720px; margin-top: 20px; font-size:1.1rem; color: var(--muted);">
+        The intelligence is becoming a <strong>commodity</strong>. What will differentiate your school is not which AI you subscribe to — it's <strong>what you do with it</strong>.
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 13 — GET STARTED
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-13">
+    <div class="content-col">
+      <div class="eyebrow">Getting Started Today</div>
+      <h2>From zero to working AI tool <span class="accent">in under an hour</span></h2>
+      <div class="divider"></div>
+      <div class="cols-2">
+        <div class="stack">
+          <div class="card card-green">
+            <h3>Minimum viable setup</h3>
+            <ol class="step-list">
+              <li><span class="step-num">1</span><span>Copy the HTML template from <strong>thinkhere-app</strong> (open source, Apache 2.0)</span></li>
+              <li><span class="step-num">2</span><span>Edit the system prompt — describe your learners, tone, role</span></li>
+              <li><span class="step-num">3</span><span>Host on GitHub Pages — free, no server, no config</span></li>
+              <li><span class="step-num">4</span><span>Share the URL with your class — it just works</span></li>
+            </ol>
+          </div>
+          <div class="card">
+            <h3>To add a knowledge base</h3>
+            <ol class="step-list">
+              <li><span class="step-num">+</span><span>Export your curriculum doc as .txt</span></li>
+              <li><span class="step-num">+</span><span>Upload via the KB button in the UI</span></li>
+              <li><span class="step-num">+</span><span>It embeds locally — done</span></li>
+            </ol>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card card-yellow">
+            <h3 style="color:var(--yellow);">You don't need to be a developer</h3>
+            <p>Writing a system prompt is closer to writing a lesson plan than writing code. If you can describe to a teaching assistant how you want them to behave in your classroom, you can write a system prompt.</p>
+          </div>
+          <div class="card">
+            <h3>What you do need</h3>
+            <ul class="step-list">
+              <li><span>💻</span><span>A modern laptop or desktop (GPU preferred, not required)</span></li>
+              <li><span>🌐</span><span>Chrome or Edge (WebGPU support)</span></li>
+              <li><span>📶</span><span>Internet once to download the model (~1.2 GB, then cached)</span></li>
+              <li><span>⏱️</span><span>About 30 minutes to build your first persona</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE FINAL — CALL TO ACTION
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-final">
+    <div class="content-col center" style="align-items:center; gap:24px;">
+      <div class="eyebrow">AI × EI Conference 2026</div>
+      <h1 style="font-size: clamp(2.2rem, 5vw, 3.8rem);">The narrative is <span class="accent">yours</span><br>to write.</h1>
+      <div class="divider" style="margin: 0 auto;"></div>
+      <p style="max-width:680px; font-size: 1.15rem; color:var(--muted);">
+        Big Tech built the infrastructure. The open-source community opened the weights.
+        The browser brought it to the edge. <strong>You bring the pedagogy.</strong>
+      </p>
+      <div class="cols-3" style="margin-top:8px; max-width:900px;">
+        <div class="card center">
+          <div style="font-size:1.5rem; margin-bottom:8px;">🔧</div>
+          <h3>thinkhere-app</h3>
+          <p class="muted" style="font-size:0.9rem;">Open source. Fork it. Build your own version. No permission needed.</p>
+        </div>
+        <div class="card center">
+          <div style="font-size:1.5rem; margin-bottom:8px;">🎓</div>
+          <h3>Start with one class</h3>
+          <p class="muted" style="font-size:0.9rem;">Pick one use case, one group of students, one doc to upload. Ship it this term.</p>
+        </div>
+        <div class="card center">
+          <div style="font-size:1.5rem; margin-bottom:8px;">🤝</div>
+          <h3>Share what you build</h3>
+          <p class="muted" style="font-size:0.9rem;">System prompts that work are worth sharing. Build a library together.</p>
+        </div>
+      </div>
+      <p style="font-size: 0.9rem; color: var(--muted); margin-top: 8px;">
+        Slides hosted via GitHub Pages · Built with HTML, Transformers.js, Gemma 4 · No tracking, no cookies, no cloud
+      </p>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- ══════════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════════ -->
+<script type="module">
+  // ── SLIDE NAVIGATION ──
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let current = 0;
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, slides.length - 1));
+    slides[current].classList.add('active');
+    const pct = ((current + 1) / slides.length) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('slide-counter').textContent = `${current + 1} / ${slides.length}`;
+  }
+
+  document.getElementById('btn-next').addEventListener('click', () => goTo(current + 1));
+  document.getElementById('btn-prev').addEventListener('click', () => goTo(current - 1));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')                    { e.preventDefault(); goTo(current - 1); }
+  });
+
+  goTo(0);
+
+  // ── DEMO: SYSTEM PROMPT PRESETS ──
+  const PRESETS = {
+    reading:  `You are Archie, a friendly reading buddy for Year 7 students aged 11–12. Use simple, encouraging language. Never just give plot answers — ask the student what THEY think. Keep responses to 3–4 sentences.`,
+    debate:   `You are a debate coach for Sixth Form students. Always argue the opposing side of whatever position the student takes. Push back with evidence and rhetorical questions. Be challenging but fair.`,
+    maths:    `You are a patient maths tutor for GCSE students. When a student gets stuck, don't give the answer — instead ask a guiding question that helps them figure out the next step themselves. Use plain language, no jargon.`,
+    cpd:      `You are a professional coaching assistant for teachers. Help staff reflect on their practice by asking open questions. Ground all advice in the DfE Teachers' Standards. Avoid edu-jargon. Ask one question at a time.`,
+    socratic: `You are a Socratic tutor. You never give direct answers. You only respond with questions that help the learner think more deeply. Every response must end with a question. Be warm but intellectually rigorous.`,
+  };
+
+  window.setPreset = function(key) {
+    const el = document.getElementById('demo-system-prompt');
+    if (el && PRESETS[key]) el.value = PRESETS[key];
+  };
+
+  // ── DEMO: MODEL LOADING ──
+  let demoModel = null;
+  let demoProcessor = null;
+  let demoTokenizer = null;
+  let demoTJS = null;
+  let demoReady = false;
+
+  // Simple IndexedDB for KB
+  let demoKB = [];          // { text, embedding }
+  let embPipeline = null;
+
+  window.loadDemoModel = async function() {
+    const btn    = document.getElementById('demo-load-btn');
+    const status = document.getElementById('demo-status');
+    const prog   = document.getElementById('demo-load-progress');
+
+    btn.disabled = true;
+    btn.textContent = '⏳ Loading…';
+    status.textContent = 'Importing Transformers.js…';
+
+    try {
+      const TJS_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.2/dist/transformers.min.js';
+      demoTJS = await import(TJS_URL);
+
+      if (demoTJS.env) {
+        demoTJS.env.allowLocalModels = false;
+      }
+
+      status.textContent = 'Downloading Gemma 4 (~1.2 GB, cached after first load)…';
+
+      const progressCb = (p) => {
+        if (p && p.progress != null) {
+          const pct = Math.round(p.progress);
+          prog.textContent = `${pct}% — ${p.file || ''}`;
+          status.textContent = `Downloading model… ${pct}%`;
+        }
+      };
+
+      const modelId = 'onnx-community/gemma-4-E2B-it-ONNX';
+
+      demoProcessor = await (demoTJS.Gemma4Processor ?? demoTJS.AutoProcessor).from_pretrained(modelId, { progress_callback: progressCb });
+      demoTokenizer = demoProcessor.tokenizer;
+
+      const Gemma4Class = demoTJS.Gemma4ForConditionalGeneration ?? demoTJS.AutoModelForCausalLM;
+      demoModel = await Gemma4Class.from_pretrained(modelId, {
+        dtype: 'q4f16',
+        device: 'webgpu',
+        progress_callback: progressCb,
+      });
+
+      demoReady = true;
+      status.textContent = 'Gemma 4 E2B ready';
+      prog.textContent = '';
+      btn.textContent = '✅ Model loaded';
+      document.getElementById('demo-input').disabled = false;
+      document.getElementById('demo-send-btn').disabled = false;
+
+    } catch (err) {
+      console.error(err);
+      status.textContent = 'Load failed — see console';
+      prog.textContent = err.message;
+      btn.disabled = false;
+      btn.textContent = '⚡ Retry Load';
+    }
+  };
+
+  // ── DEMO: KNOWLEDGE BASE (simple local embedding) ──
+  async function getEmbedPipeline() {
+    if (embPipeline) return embPipeline;
+    const TJS_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.2/dist/transformers.min.js';
+    const TJS = demoTJS || await import(TJS_URL);
+    embPipeline = await TJS.pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
+      dtype: 'q8',
+      device: 'wasm',
+    });
+    return embPipeline;
+  }
+
+  function chunkText(text, size=500, overlap=100) {
+    const chunks = [];
+    let start = 0;
+    while (start < text.length) {
+      const end = Math.min(start + size, text.length);
+      const chunk = text.slice(start, end).trim();
+      if (chunk.length > 20) chunks.push(chunk);
+      start += size - overlap;
+    }
+    return chunks;
+  }
+
+  function cosine(a, b) {
+    let dot=0, na=0, nb=0;
+    for (let i=0;i<a.length;i++){dot+=a[i]*b[i]; na+=a[i]*a[i]; nb+=b[i]*b[i];}
+    return dot/(Math.sqrt(na)*Math.sqrt(nb)+1e-8);
+  }
+
+  function kwScore(query, text) {
+    const words = query.toLowerCase().split(/\W+/).filter(w=>w.length>2);
+    const t = text.toLowerCase();
+    if (!words.length) return 0;
+    return words.filter(w=>t.includes(w)).length / words.length;
+  }
+
+  window.handleKBUpload = async function(event) {
+    const files = Array.from(event.target.files);
+    const kbStatus = document.getElementById('kb-status');
+    const ragBadge = document.getElementById('rag-active-badge');
+    kbStatus.textContent = 'Embedding docs…';
+
+    const pipe = await getEmbedPipeline();
+
+    for (const file of files) {
+      const text = await file.text();
+      const chunks = chunkText(text);
+      for (const chunk of chunks) {
+        const out = await pipe(chunk, { pooling: 'mean', normalize: true });
+        demoKB.push({ text: chunk, embedding: Array.from(out.data) });
+      }
+    }
+
+    kbStatus.textContent = `${demoKB.length} chunks from ${files.length} doc(s)`;
+    ragBadge.style.display = 'inline-block';
+  };
+
+  async function retrieveContext(query) {
+    if (!demoKB.length) return null;
+    const pipe = await getEmbedPipeline();
+    const out = await pipe(query, { pooling: 'mean', normalize: true });
+    const qEmb = Array.from(out.data);
+    const scored = demoKB.map(c => ({
+      ...c,
+      score: 0.7*cosine(qEmb,c.embedding) + 0.3*kwScore(query,c.text)
+    })).filter(c=>c.score>=0.15).sort((a,b)=>b.score-a.score);
+    let ctx='';
+    for(const c of scored){ if(ctx.length+c.text.length>3000) break; ctx+=c.text+'\n\n'; }
+    return ctx.trim()||null;
+  }
+
+  // ── DEMO: SEND MESSAGE ──
+  window.sendDemo = async function() {
+    if (!demoReady) return;
+    const inputEl  = document.getElementById('demo-input');
+    const outputEl = document.getElementById('demo-output');
+    const sendBtn  = document.getElementById('demo-send-btn');
+    const sysEl    = document.getElementById('demo-system-prompt');
+
+    const userText = inputEl.value.trim();
+    if (!userText) return;
+
+    inputEl.value = '';
+    sendBtn.disabled = true;
+    outputEl.style.color = 'var(--muted)';
+    outputEl.textContent = '⏳ Generating…';
+
+    try {
+      const systemPrompt = sysEl.value.trim();
+      const ragContext   = await retrieveContext(userText);
+
+      let fullUserText = userText;
+      if (ragContext) {
+        fullUserText = `[Relevant context from your documents]\n${ragContext}\n\n${userText}`;
+      }
+
+      const firstTurn = systemPrompt
+        ? `${systemPrompt}\n\n${fullUserText}`
+        : fullUserText;
+
+      const messages = [
+        { role: 'user', content: [{ type: 'text', text: firstTurn }] }
+      ];
+
+      const inputs = await demoProcessor(
+        demoProcessor.apply_chat_template(messages, { add_generation_prompt: true }),
+        null, null, { add_special_tokens: false }
+      );
+
+      let output = '';
+      outputEl.style.color = 'var(--text)';
+      outputEl.textContent = '';
+
+      const Streamer = demoTJS.TextStreamer;
+      const streamer = new Streamer(demoTokenizer, {
+        skip_prompt: true,
+        skip_special_tokens: false,
+        callback_function: (chunk) => {
+          output += chunk;
+          // Render <think>…</think> in muted style
+          outputEl.innerHTML = output
+            .replace(/<think>([\s\S]*?)<\/think>/g,
+              '<span class="think-block">&lt;thinking…&gt;$1&lt;/thinking&gt;</span>')
+            .replace(/\n/g, '<br>');
+          outputEl.scrollTop = outputEl.scrollHeight;
+        }
+      });
+
+      await demoModel.generate({
+        ...inputs,
+        max_new_tokens: 300,
+        do_sample: false,
+        streamer,
+      });
+
+    } catch (err) {
+      console.error(err);
+      outputEl.textContent = 'Error: ' + err.message;
+    } finally {
+      sendBtn.disabled = false;
+    }
+  };
+</script>
+
+</body>
+</html>

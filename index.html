@@ -92,10 +92,10 @@
       position: fixed;
       top: 0; left: 0;
       height: 2px;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      background: var(--primary);
       transition: width 0.35s cubic-bezier(.4,0,.2,1);
       z-index: 200;
-      box-shadow: 0 0 12px rgba(244,196,48,0.6);
+      box-shadow: 0 0 12px rgba(244,196,48,0.5);
     }
 
     /* ═══════════════════════════════════════════
@@ -176,7 +176,7 @@
       font-weight: 600;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--secondary);
+      color: var(--on-surface-variant);
       margin-bottom: 14px;
     }
 
@@ -204,7 +204,7 @@
       font-weight: 600;
       line-height: 1.35;
       letter-spacing: -0.01em;
-      color: var(--secondary);
+      color: var(--on-surface);
       margin-bottom: 8px;
     }
 
@@ -277,7 +277,7 @@
     .divider {
       width: 48px;
       height: 2px;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      background: var(--primary);
       border-radius: 2px;
       flex-shrink: 0;
     }
@@ -301,23 +301,22 @@
     }
 
     .card-glass-secondary {
-      background: rgba(56, 217, 217, 0.04);
-      border: 1px solid rgba(56, 217, 217, 0.16);
+      background: var(--surface-container);
+      border: 1px solid var(--outline);
       border-radius: var(--r-xl);
       padding: 24px;
-      backdrop-filter: blur(12px);
     }
 
     .card-danger {
-      background: rgba(248, 113, 113, 0.05);
-      border: 1px solid rgba(248, 113, 113, 0.2);
+      background: var(--surface-container);
+      border: 1px solid var(--outline);
       border-radius: var(--r-xl);
       padding: 24px;
     }
 
     .card-success {
-      background: rgba(74, 222, 128, 0.04);
-      border: 1px solid rgba(74, 222, 128, 0.2);
+      background: var(--surface-container);
+      border: 1px solid var(--outline);
       border-radius: var(--r-xl);
       padding: 24px;
     }
@@ -337,9 +336,9 @@
       letter-spacing: 0.06em;
     }
     .chip-primary   { background: rgba(244,196,48,0.12); color: var(--primary); border: 1px solid rgba(244,196,48,0.25); }
-    .chip-secondary { background: rgba(56,217,217,0.1);  color: var(--secondary); border: 1px solid rgba(56,217,217,0.22); }
-    .chip-danger    { background: rgba(248,113,113,0.1); color: var(--error); border: 1px solid rgba(248,113,113,0.22); }
-    .chip-success   { background: rgba(74,222,128,0.1);  color: var(--success); border: 1px solid rgba(74,222,128,0.22); }
+    .chip-secondary { background: rgba(146,150,176,0.1); color: var(--on-surface-variant); border: 1px solid var(--outline); }
+    .chip-danger    { background: rgba(146,150,176,0.1); color: var(--on-surface-variant); border: 1px solid var(--outline); }
+    .chip-success   { background: rgba(146,150,176,0.1); color: var(--on-surface-variant); border: 1px solid var(--outline); }
     .chip-muted     { background: rgba(146,150,176,0.1); color: var(--on-surface-variant); border: 1px solid var(--outline); }
 
     .tag-row {
@@ -514,9 +513,9 @@
       font-size: 10px;
       font-weight: 600;
       letter-spacing: 0.08em;
-      color: var(--secondary);
-      background: rgba(56,217,217,0.08);
-      border: 1px solid rgba(56,217,217,0.2);
+      color: var(--primary);
+      background: rgba(244,196,48,0.08);
+      border: 1px solid rgba(244,196,48,0.2);
       padding: 2px 10px;
       border-radius: var(--r-full);
     }
@@ -633,9 +632,9 @@
       font-size: 10px;
       font-weight: 600;
       letter-spacing: 0.07em;
-      background: rgba(74,222,128,0.1);
-      color: var(--success);
-      border: 1px solid rgba(74,222,128,0.25);
+      background: rgba(244,196,48,0.08);
+      color: var(--primary);
+      border: 1px solid rgba(244,196,48,0.2);
       padding: 2px 10px;
       border-radius: var(--r-full);
       display: none;
@@ -838,7 +837,7 @@
         <li><span class="step-icon" style="background:var(--surface-container-high); color:var(--on-surface-variant); font-size:11px; font-weight:700; width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;">1</span><span><strong>Chat to a server</strong> — you type, a remote model responds. ChatGPT, early Claude. Intelligence lives in a data centre.</span></li>
         <li><span class="step-icon" style="background:var(--surface-container-high); color:var(--on-surface-variant); font-size:11px; font-weight:700; width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;">2</span><span><strong>Chat to a server with tools</strong> — the model can browse the web, write code, call APIs. More powerful, still centralised.</span></li>
         <li><span class="step-icon" style="background:var(--surface-container-high); color:var(--on-surface-variant); font-size:11px; font-weight:700; width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;">3</span><span><strong>Multiple servers working together</strong> — agent frameworks, multi-model pipelines. Powerful, complex, expensive.</span></li>
-        <li><span class="step-icon" style="background:var(--surface-container-high); color:var(--secondary-container); font-size:11px; font-weight:700; width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;">4</span><span><strong>Smaller, optimised models</strong> — Gemma, Phi, Mistral. Efficient enough to run on powerful consumer hardware. The cloud is no longer mandatory.</span></li>
+        <li><span class="step-icon" style="background:var(--surface-container-high); color:var(--on-surface-variant); font-size:11px; font-weight:700; width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;">4</span><span><strong>Smaller, optimised models</strong> — Gemma, Phi, Mistral. Efficient enough to run on powerful consumer hardware. The cloud is no longer mandatory.</span></li>
         <li><span class="step-icon" style="background:var(--primary-container); color:var(--on-primary-container); font-size:11px; font-weight:700; width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;">5</span><span><strong style="color:var(--primary);">Models in the browser itself</strong> — WebGPU, Transformers.js. No server. No account. No subscription. The model runs where you are.</span></li>
       </ul>
       <div class="quote-block" style="margin-top:20px;">
@@ -1057,7 +1056,7 @@ Teachers' Standards. Avoid jargon."</span>
             </div>
           </div>
           <div class="card-success">
-            <p class="headline-md" style="color:var(--success);">Where it lives</p>
+            <p class="headline-md">Where it lives</p>
             <p class="body-md">Entirely on the device. The document never leaves the browser. Nothing is sent to any server. It's stored locally and deleted when you choose.</p>
           </div>
         </div>
@@ -1227,7 +1226,7 @@ Teachers' Standards. Avoid jargon."</span>
         </div>
         <div class="stack">
           <div class="card-success">
-            <p class="headline-md" style="color:var(--success);">With a device-local approach</p>
+            <p class="headline-md">With a device-local approach</p>
             <ul class="step-list" style="margin-top:10px;">
               <li><span class="step-icon">✅</span><span>All processing happens on the device — zero data in transit</span></li>
               <li><span class="step-icon">✅</span><span>No account means no identity linked to any conversation</span></li>
@@ -1261,7 +1260,7 @@ Teachers' Standards. Avoid jargon."</span>
         <div class="stack">
           <div class="card-glass">
             <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:6px;">
-              <p class="headline-md" style="color:var(--secondary);">inference.net</p>
+              <p class="headline-md">inference.net</p>
               <span style="font-family:var(--font-mono); font-size:11px; color:var(--on-surface-variant);">Full-stack LLM lifecycle platform</span>
             </div>
             <p class="body-md" style="color:var(--on-surface-variant);">Train, fine-tune, deploy and evaluate open models — all in one place, at a fraction of the cost of the big providers. Designed for teams who want control over the whole lifecycle, not just the chat interface.</p>
@@ -1402,7 +1401,7 @@ Teachers' Standards. Avoid jargon."</span>
           <p class="body-lg">Paste the prompt below into <strong>Claude</strong> (claude.ai or the API). It will generate a complete, self-contained HTML file — the same in-browser AI chat you've been using in this presentation.</p>
           <p class="body-lg" style="color:var(--on-surface-variant);">No build tools. No dependencies to install. Open the file in Chrome and it works.</p>
           <div class="card-glass" style="padding:14px 16px;">
-            <p class="headline-md" style="color:var(--secondary); margin-bottom:8px;">What you'll get</p>
+            <p class="headline-md" style="margin-bottom:8px;">What you'll get</p>
             <ul class="step-list">
               <li><span class="step-icon">✅</span><span>Gemma 4 E2B running entirely in the browser via WebGPU</span></li>
               <li><span class="step-icon">✅</span><span>Editable system prompt — define who the AI is</span></li>
@@ -1535,7 +1534,7 @@ Never use idioms without explaining them."</span>
         <div class="stack">
           <p class="body-md" style="color:var(--on-surface-variant);">This technique is called Retrieval Augmented Generation (RAG). The AI searches your documents before every reply and injects the most relevant passages into its context.</p>
           <div class="card-success">
-            <p class="headline-md" style="color:var(--success);">The process, step by step</p>
+            <p class="headline-md">The process, step by step</p>
             <ol class="step-list" style="margin-top:10px;">
               <li><span class="step-num">1</span><span>You upload a plain text document</span></li>
               <li><span class="step-num">2</span><span>It's split into ~500-character chunks with overlap</span></li>
@@ -1617,10 +1616,10 @@ Never use idioms without explaining them."</span>
           <div class="card-glass">
             <p class="headline-md">Total cost to run</p>
             <ul class="step-list" style="margin-top:10px;">
-              <li><span class="step-icon">💰</span><span>Model weights: <strong style="color:var(--success);">free</strong> — open weights, Apache 2.0</span></li>
-              <li><span class="step-icon">🖥️</span><span>Inference: <strong style="color:var(--success);">free</strong> — your device's GPU</span></li>
-              <li><span class="step-icon">☁️</span><span>Hosting: <strong style="color:var(--success);">free</strong> — GitHub Pages</span></li>
-              <li><span class="step-icon">🔑</span><span>API key: <strong style="color:var(--success);">none required</strong></span></li>
+              <li><span class="step-icon">💰</span><span>Model weights: <strong style="color:var(--primary);">free</strong> — open weights, Apache 2.0</span></li>
+              <li><span class="step-icon">🖥️</span><span>Inference: <strong style="color:var(--primary);">free</strong> — your device's GPU</span></li>
+              <li><span class="step-icon">☁️</span><span>Hosting: <strong style="color:var(--primary);">free</strong> — GitHub Pages</span></li>
+              <li><span class="step-icon">🔑</span><span>API key: <strong style="color:var(--primary);">none required</strong></span></li>
             </ul>
           </div>
         </div>
@@ -1639,7 +1638,7 @@ Never use idioms without explaining them."</span>
       <div class="cols-2">
         <div class="stack">
           <div class="card-success">
-            <p class="headline-md" style="color:var(--success);">The simplest starting point</p>
+            <p class="headline-md">The simplest starting point</p>
             <ol class="step-list" style="margin-top:10px;">
               <li><span class="step-num">1</span><span>Start from an open source HTML template — Apache 2.0, no sign-up</span></li>
               <li><span class="step-num">2</span><span>Edit the system prompt to describe your learners, tone, role</span></li>
@@ -1799,11 +1798,11 @@ Never use idioms without explaining them."</span>
     el.innerHTML = chatHistory.map(m => {
       const isUser = m.role === 'user';
       const kbBadge = (!isUser && m.ragUsed)
-        ? `<span style="margin-left:6px;font-size:9px;font-weight:600;letter-spacing:0.08em;color:var(--secondary);opacity:0.8;text-transform:uppercase;">KB</span>`
+        ? `<span style="margin-left:6px;font-size:9px;font-weight:600;letter-spacing:0.08em;color:var(--primary);opacity:0.8;text-transform:uppercase;">KB</span>`
         : '';
       const label = isUser
         ? `<span style="font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:0.08em;color:var(--primary);text-transform:uppercase;">You</span>`
-        : `<span style="font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:0.08em;color:var(--secondary);text-transform:uppercase;">${document.getElementById('demo-persona-title').value||'AI'}</span>${kbBadge}`;
+        : `<span style="font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:0.08em;color:var(--primary);text-transform:uppercase;">${document.getElementById('demo-persona-title').value||'AI'}</span>${kbBadge}`;
       const text = m.content
         .replace(/<think>[\s\S]*?<\/think>/g, '')
         .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')

@@ -1351,17 +1351,35 @@ Teachers' Standards. Avoid jargon."</span>
       <h1 class="display-xl" style="font-size: clamp(56px, 8vw, 96px); line-height:1;">
         Questions?
       </h1>
-      <div id="deck-qr" style="padding:16px; background:#fff; border-radius:var(--r-lg); display:inline-block; line-height:0;"></div>
-      <p style="font-family:var(--font-display); font-size:13px; letter-spacing:0.04em; color:var(--on-surface-variant);">
-        ipattis.github.io/ai-x-ei-conference-2026
-      </p>
+      <div style="display:flex; gap:48px; align-items:flex-start; justify-content:center;">
+        <div style="display:flex; flex-direction:column; align-items:center; gap:12px;">
+          <div id="deck-qr" style="padding:14px; background:#fff; border-radius:var(--r-lg); display:inline-block; line-height:0;"></div>
+          <p style="font-family:var(--font-display); font-size:12px; letter-spacing:0.04em; color:var(--on-surface-variant);">
+            This deck
+          </p>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:12px;">
+          <div id="linkedin-qr" style="padding:14px; background:#fff; border-radius:var(--r-lg); display:inline-block; line-height:0;"></div>
+          <p style="font-family:var(--font-display); font-size:12px; letter-spacing:0.04em; color:var(--on-surface-variant);">
+            LinkedIn
+          </p>
+        </div>
+      </div>
     </div>
   </div>
   <script>
     new QRCode(document.getElementById('deck-qr'), {
       text: 'https://ipattis.github.io/ai-x-ei-conference-2026/',
-      width: 200,
-      height: 200,
+      width: 180,
+      height: 180,
+      colorDark: '#08090d',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+    new QRCode(document.getElementById('linkedin-qr'), {
+      text: 'https://www.linkedin.com/in/isaacpattis/',
+      width: 180,
+      height: 180,
       colorDark: '#08090d',
       colorLight: '#ffffff',
       correctLevel: QRCode.CorrectLevel.M

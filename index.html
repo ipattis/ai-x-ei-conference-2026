@@ -1285,17 +1285,70 @@ Teachers' Standards. Avoid jargon."</span>
       <div class="divider" style="margin:0 auto;"></div>
       <p class="body-muted">Technical details for those who want to go further.</p>
       <div class="tag-row" style="justify-content:center; margin-top:8px;">
-        <span class="chip chip-muted">A — How the technology works</span>
-        <span class="chip chip-muted">B — Defining the AI's character</span>
-        <span class="chip chip-muted">C — Grounding it in your knowledge</span>
-        <span class="chip chip-muted">D — Code reference</span>
-        <span class="chip chip-muted">E — Getting started</span>
+        <span class="chip chip-muted">A — Build it yourself (Claude prompt)</span>
+        <span class="chip chip-muted">B — How the technology works</span>
+        <span class="chip chip-muted">C — Defining the AI's character</span>
+        <span class="chip chip-muted">D — Grounding it in your knowledge</span>
+        <span class="chip chip-muted">E — Code reference</span>
+        <span class="chip chip-muted">F — Getting started</span>
       </div>
     </div>
   </div>
 
   <!-- ══════════════════════════════════
-       APPENDIX A — HOW IT WORKS
+       APPENDIX A — BUILD IT YOURSELF
+  ══════════════════════════════════ -->
+  <div class="slide" id="slide-a0">
+    <div class="content-col" style="max-width:960px;">
+      <div class="eyebrow">Appendix A — Build it yourself</div>
+      <h2 class="headline-lg">One prompt. <span class="text-primary glow-text">Claude builds the demo.</span></h2>
+      <div class="divider"></div>
+      <div class="cols-2" style="align-items:flex-start;">
+        <div class="stack">
+          <p class="body-lg">Paste the prompt below into <strong>Claude</strong> (claude.ai or the API). It will generate a complete, self-contained HTML file — the same in-browser AI chat you've been using in this presentation.</p>
+          <p class="body-lg" style="color:var(--on-surface-variant);">No build tools. No dependencies to install. Open the file in Chrome and it works.</p>
+          <div class="card-glass" style="padding:14px 16px;">
+            <p class="headline-md" style="color:var(--secondary); margin-bottom:8px;">What you'll get</p>
+            <ul class="step-list">
+              <li><span class="step-icon">✅</span><span>Gemma 4 E2B running entirely in the browser via WebGPU</span></li>
+              <li><span class="step-icon">✅</span><span>Editable system prompt — define who the AI is</span></li>
+              <li><span class="step-icon">✅</span><span>RAG knowledge base — upload .txt files, retrieve by meaning</span></li>
+              <li><span class="step-icon">✅</span><span>Multi-turn conversation with export</span></li>
+              <li><span class="step-icon">✅</span><span>Zero backend, zero API key, zero subscription</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="stack">
+          <div style="background:var(--surface-container-lowest); border:1px solid var(--outline); border-radius:var(--r-lg); padding:16px 18px; font-family:var(--font-mono); font-size:12px; line-height:1.75; color:var(--on-surface); white-space:pre-wrap; overflow-wrap:break-word;">Build me a single self-contained HTML file that runs a
+local AI chat interface entirely in the browser.
+
+Requirements:
+- Load Gemma-4-E2B-IT-q4f16_1-MLC from
+  npm/@mlc-ai/web-llm via CDN (no install needed)
+- Use WebGPU for inference — display a loading progress
+  bar during model initialisation
+- Editable system prompt textarea at the top so the user
+  can change the AI persona without reloading
+- Multi-turn conversation: maintain full message history
+  and pass it to the model on each turn
+- RAG knowledge base: a button to upload one or more
+  .txt files; chunk them, embed with
+  Xenova/all-MiniLM-L6-v2 via Transformers.js, store in
+  memory, retrieve the top-3 most relevant chunks via
+  cosine similarity and prepend them to the system
+  prompt on each query
+- Clean dark-theme UI — no external CSS frameworks
+- Everything in one .html file, no server required
+
+Return only the HTML file, no explanation.</div>
+          <p class="body-muted" style="font-size:12px; margin-top:8px;">Works best with Claude Sonnet 4+ or Opus. If the output is truncated, reply "continue" and it will finish.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       APPENDIX B — HOW IT WORKS
   ══════════════════════════════════ -->
   <div class="slide" id="slide-a">
     <div class="content-col">

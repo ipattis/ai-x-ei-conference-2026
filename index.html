@@ -736,6 +736,7 @@
       .cols-2, .cols-3 { grid-template-columns: 1fr; }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
@@ -1342,6 +1343,31 @@ Teachers' Standards. Avoid jargon."</span>
       </p>
     </div>
   </div>
+
+  <!-- ══════════════════════════════════
+       QUESTIONS / QR
+  ══════════════════════════════════ -->
+  <div class="slide center" id="slide-questions">
+    <div class="content-col" style="align-items:center; text-align:center; gap:28px;">
+      <h1 class="display-xl" style="font-size: clamp(56px, 8vw, 96px); line-height:1;">
+        Questions?
+      </h1>
+      <div id="deck-qr" style="padding:16px; background:#fff; border-radius:var(--r-lg); display:inline-block; line-height:0;"></div>
+      <p style="font-family:var(--font-display); font-size:13px; letter-spacing:0.04em; color:var(--on-surface-variant);">
+        ipattis.github.io/ai-x-ei-conference-2026
+      </p>
+    </div>
+  </div>
+  <script>
+    new QRCode(document.getElementById('deck-qr'), {
+      text: 'https://ipattis.github.io/ai-x-ei-conference-2026/',
+      width: 200,
+      height: 200,
+      colorDark: '#08090d',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  </script>
 
   <!-- ══════════════════════════════════════════════════════
        APPENDIX DIVIDER
